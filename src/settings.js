@@ -56,6 +56,7 @@ function mergeSettings(cfg, defCfg) {
  Should be true while plugin-development to ensure structure-changes within settings persist.
  @param reset Whether to reset the settings.
  */
+
 function Settings(hash, version, defCfg, callback, forceUpdate, reset) {
 	this.hash = hash;
 	this.version = version || this.version;
