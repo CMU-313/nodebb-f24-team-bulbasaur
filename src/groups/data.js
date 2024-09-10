@@ -65,33 +65,36 @@ module.exports = function (Groups) {
 	};
 };
 
+function setDefaultValues(group) {
+	group.userTitleEnabled = ([null, undefined].includes(group.userTitleEnabled)) ? 1 : group.userTitleEnabled;
+	group.labelColor = validator.escape(String(group.labelColor || '#000000'));
+	group.textColor = validator.escape(String(group.textColor || '#ffffff'));
+	group.icon = validator.escape(String(group.icon || ''));
+	group.createtimeISO = utils.toISOString(group.createtime);
+	group.private = ([null, undefined].includes(group.private)) ? 1 : group.private;
+	group.memberPostCids = group.memberPostCids || '';
+	group.memberPostCidsArray = group.memberPostCids.split(',').map(cid => parseInt(cid, 10)).filter(Boolean);
+	group['cover:thumb:url'] = group['cover:thumb:url'] || group['cover:url'];
+}
+
+function coverUrl(group, url) {
+	if (group[url]) {
+		group[url] = group[url].startsWith('http') ? group[url] : (nconf.get('relative_path') + group[url]);
+	} else {
+		group[url] = require('../coverPhoto').getDefaultGroupCover(group.name);
+	}
+}
+
 function modifyGroup(group, fields) {
 	if (group) {
 		db.parseIntFields(group, intFields, fields);
-
 		escapeGroupData(group);
-		group.userTitleEnabled = ([null, undefined].includes(group.userTitleEnabled)) ? 1 : group.userTitleEnabled;
-		group.labelColor = validator.escape(String(group.labelColor || '#000000'));
-		group.textColor = validator.escape(String(group.textColor || '#ffffff'));
-		group.icon = validator.escape(String(group.icon || ''));
-		group.createtimeISO = utils.toISOString(group.createtime);
-		group.private = ([null, undefined].includes(group.private)) ? 1 : group.private;
-		group.memberPostCids = group.memberPostCids || '';
-		group.memberPostCidsArray = group.memberPostCids.split(',').map(cid => parseInt(cid, 10)).filter(Boolean);
 
-		group['cover:thumb:url'] = group['cover:thumb:url'] || group['cover:url'];
+		console.log('MICHAEL LI');
+		setDefaultValues(group);
 
-		if (group['cover:url']) {
-			group['cover:url'] = group['cover:url'].startsWith('http') ? group['cover:url'] : (nconf.get('relative_path') + group['cover:url']);
-		} else {
-			group['cover:url'] = require('../coverPhoto').getDefaultGroupCover(group.name);
-		}
-
-		if (group['cover:thumb:url']) {
-			group['cover:thumb:url'] = group['cover:thumb:url'].startsWith('http') ? group['cover:thumb:url'] : (nconf.get('relative_path') + group['cover:thumb:url']);
-		} else {
-			group['cover:thumb:url'] = require('../coverPhoto').getDefaultGroupCover(group.name);
-		}
+		coverUrl(group, 'cover:url');
+		coverUrl(group, 'cover:thumb:url');
 
 		group['cover:position'] = validator.escape(String(group['cover:position'] || '50% 50%'));
 	}
