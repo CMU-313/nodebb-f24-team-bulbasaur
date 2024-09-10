@@ -93,15 +93,10 @@ postsAPI.edit = async function (caller, data) {
 	// Trim and remove HTML (latter for composers that send in HTML, like redactor)
 	const contentLen = utils.stripHTMLTags(data.content).trim().length;
 
-	if (data.title && data.title.length < meta.config.minimumTitleLength) {
-		throw new Error(`[[error:title-too-short, ${meta.config.minimumTitleLength}]]`);
-	} else if (data.title && data.title.length > meta.config.maximumTitleLength) {
-		throw new Error(`[[error:title-too-long, ${meta.config.maximumTitleLength}]]`);
-	} else if (meta.config.minimumPostLength !== 0 && contentLen < meta.config.minimumPostLength) {
-		throw new Error(`[[error:content-too-short, ${meta.config.minimumPostLength}]]`);
-	} else if (contentLen > meta.config.maximumPostLength) {
-		throw new Error(`[[error:content-too-long, ${meta.config.maximumPostLength}]]`);
-	} else if (!await posts.canUserPostContentWithLinks(caller.uid, data.content)) {
+	validateTitleLength(data);
+	validateContentLength(contentLen);
+
+	if (!await posts.canUserPostContentWithLinks(caller.uid, data.content)) {
 		throw new Error(`[[error:not-enough-reputation-to-post-links, ${meta.config['min:rep:post-links']}]]`);
 	}
 
@@ -155,6 +150,24 @@ postsAPI.edit = async function (caller, data) {
 	uids.forEach(uid => websockets.in(`uid_${uid}`).emit('event:post_edited', editResult));
 	return returnData;
 };
+
+function validateTitleLength(data) {
+	if (data.title) {
+		if (data.title.length < meta.config.minimumTitleLength) {
+			throw new Error(`[[error:title-too-short, ${meta.config.minimumTitleLength}]]`);
+		} else if (data.title.length > meta.config.maximumTitleLength) {
+			throw new Error(`[[error:title-too-long, ${meta.config.maximumTitleLength}]]`);
+		}
+	}
+}
+
+function validateContentLength(contentLen) {
+	if (meta.config.minimumPostLength !== 0 && contentLen < meta.config.minimumPostLength) {
+		throw new Error(`[[error:content-too-short, ${meta.config.minimumPostLength}]]`);
+	} else if (contentLen > meta.config.maximumPostLength) {
+		throw new Error(`[[error:content-too-long, ${meta.config.maximumPostLength}]]`);
+	}
+}
 
 postsAPI.delete = async function (caller, data) {
 	await deleteOrRestore(caller, data, {
