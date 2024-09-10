@@ -140,12 +140,12 @@ Settings.prototype.get = function (key, def) {
 		}
 	}
 	if (obj === undefined && def === undefined) {
-			def = this.defCfg;
-			for (let j = 0; j < parts.length; j += 1) {
-				part = parts[j];
-				if (part && def != null) {
-					def = def[part];
-				}
+		def = this.defCfg;
+		for (let j = 0; j < parts.length; j += 1) {
+			part = parts[j];
+			if (part && def != null) {
+				def = def[part];
+			}
 		}
 		return def;
 	}
