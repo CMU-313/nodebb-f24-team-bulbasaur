@@ -56,6 +56,7 @@ function mergeSettings(cfg, defCfg) {
  Should be true while plugin-development to ensure structure-changes within settings persist.
  @param reset Whether to reset the settings.
  */
+
 function Settings(hash, version, defCfg, callback, forceUpdate, reset) {
 	this.hash = hash;
 	this.version = version || this.version;
@@ -139,14 +140,12 @@ Settings.prototype.get = function (key, def) {
 			obj = obj[part];
 		}
 	}
-	if (obj === undefined) {
-		if (def === undefined) {
-			def = this.defCfg;
-			for (let j = 0; j < parts.length; j += 1) {
-				part = parts[j];
-				if (part && def != null) {
-					def = def[part];
-				}
+	if (obj === undefined && def === undefined) {
+		def = this.defCfg;
+		for (let j = 0; j < parts.length; j += 1) {
+			part = parts[j];
+			if (part && def != null) {
+				def = def[part];
 			}
 		}
 		return def;
