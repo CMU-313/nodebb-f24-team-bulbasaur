@@ -15,6 +15,22 @@ module.exports = function (Categories) {
 		let results = await plugins.hooks.fire('filter:category.topics.prepare', data);
 		const tids = await Categories.getTopicIds(results);
 		let topicsData = await topics.getTopicsByTids(tids, data.uid);
+		
+		let mainPosts = await topics.getMainPosts(tids, data.uid);
+		const strippedContent = mainPosts.map(post => {
+			// Strip HTML tags using regex
+			const plainText = post.content.replace(/<[^>]*>/g, '').trim();
+		
+			// Get first 10 chars
+			return plainText.substring(0, 10);
+		});
+		topicsData = topicsData.map((topic, index) => {
+			// Set titleRaw and title to stripped content corresp to same index
+			topic.titleRaw = topic.titleRaw + ": " + strippedContent[index] + "...";
+			topic.title = topic.title + ": " + strippedContent[index] + "...";
+			return topic;
+		});
+
 		topicsData = await user.blocks.filter(data.uid, topicsData);
 
 		if (!topicsData.length) {
