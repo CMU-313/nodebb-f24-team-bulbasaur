@@ -15,13 +15,18 @@ module.exports = function (Categories) {
 		let results = await plugins.hooks.fire('filter:category.topics.prepare', data);
 		const tids = await Categories.getTopicIds(results);
 		let topicsData = await topics.getTopicsByTids(tids, data.uid);
-		
+
 		// Call getMainPosts to retreive actual post content (content not available in topics)
 		const mainPosts = await topics.getMainPosts(tids, data.uid);
 		// Remove HTML tags and get first 100 characteres of content to preview
 		const strippedContent = mainPosts.map((post) => {
 			const plainText = post.content.replace(/<[^>]*>/g, '').trim();
-			return plainText.substring(0, 100);
+			if (plainText.length <= 100){
+				return plainText.substring(0, 100);
+			}else{
+				return plainText.substring(0, 100) + '...';
+			}
+			
 		});
 		topicsData = topicsData.map((topic, index) => {
 			//add new attribute to topics object
