@@ -21,15 +21,13 @@ module.exports = function (Categories) {
 		// Remove HTML tags and get first 100 characteres of content to preview
 		const strippedContent = mainPosts.map((post) => {
 			const plainText = post.content.replace(/<[^>]*>/g, '').trim();
-			if (plainText.length <= 100){
+			if (plainText.length <= 100) {
 				return plainText.substring(0, 100);
-			}else{
-				return plainText.substring(0, 100) + '...';
 			}
-			
+			return `${plainText.substring(0, 100)}...`;
 		});
 		topicsData = topicsData.map((topic, index) => {
-			//add new attribute to topics object
+			// Add new attribute to topics object
 			topic.content = strippedContent[index];
 			return topic;
 		});
