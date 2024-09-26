@@ -17,11 +17,9 @@ Additionally, the user should always be able to visually see the content preview
 The user can confirm if the preview content indeed aligns with the actual post content. 
 
 [**Our automated tests**]() case on the post content length being less than/equal to or greater than
-100 characters. As mentioned previously, the former case would ensure that post preview content length
-is the equal to that of the entire post content's. The latter case would gurantee that the post preview
-content's length is equal to the first 100 characters of the actual post content followed by a "..."
-Moreover for each of these cases, we make sure the characters between preview content 
-and actual topic content are equal. 
+100 characters. As mentioned previously, the former case would ensure that post preview content
+is equal to that of the entire post content's. The latter case would gurantee that the post preview
+content is equal to the first 100 characters of the actual post content followed by a "..."
 We believe these tests are sufficent in terms of covering the changes we made as they align with
 how we implemented and generated the post preview content in the first place. A user themselves should
-be able to test visual changes on the site.  
+be able to visually confirm changes on the site.  
