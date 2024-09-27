@@ -1006,6 +1006,9 @@ describe('Topic\'s', () => {
 			});
 		});
 
+
+
+
 		it('should not update the user\'s bookmark', async () => {
 			await socketTopics.createTopicFromPosts({ uid: topic.userId }, {
 				title: 'Fork test, no bookmark update',
@@ -1145,6 +1148,18 @@ describe('Topic\'s', () => {
 			assert(body.topic);
 			assert(body.category);
 		});
+
+
+		it('should load preview correctly', async () => {
+			const { body } = await request.get(`${nconf.get('url')}/api/category/${categoryObj.slug}`);
+			const topic = body.topics[0];
+			assert(topic);
+			// const { response, body2 } = await request.get(`${nconf.get('url')}/topic/${topicData.slug}`);
+			// assert.equal(response.statusCode, 200);
+			// assert(body2);
+			assert.equal(topic.content, "topic content");
+		});
+
 
 
 		it('should 404 if tid is not a number', async () => {
