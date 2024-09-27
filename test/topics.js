@@ -1157,7 +1157,7 @@ describe('Topic\'s', () => {
 			// const { response, body2 } = await request.get(`${nconf.get('url')}/topic/${topicData.slug}`);
 			// assert.equal(response.statusCode, 200);
 			// assert(body2);
-			assert.equal(topic.content, "topic content");
+			assert.equal(topic.content, 'topic content');
 		});
 
 
