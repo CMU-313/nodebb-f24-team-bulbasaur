@@ -67,9 +67,30 @@ define('topicList', [
 		$('#load-more-btn').on('click', function () {
 			TopicList.loadMoreTopics(1);
 		});
-
+		console.log('///////////topicList.init///////////////');
+		console.log(ajaxify.data.topics);
+		handleSolvedButton()
 		hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
 	};
+
+	function handleSolvedButton() {
+		const solvedButton = document.querySelector('[component="topic/solve"]');
+		let solveState = solvedButton.querySelector('.card-header')
+		console.log(solveState.innerText);
+		console.log(solvedButton);
+		solvedButton.addEventListener('click', function(){
+			console.log("solveBtnClicked");
+			if(solveState.innerText == "Solved"){
+				solveState.innerText = "Unsolved";
+				solveState.classList.remove('bg-success');
+				solveState.classList.add('bg-danger');
+			}else{
+				solveState.innerText = "Solved";
+				solveState.classList.remove('bg-danger');
+				solveState.classList.add('bg-success');
+			}
+		})
+	}
 
 	function findTopicListElement() {
 		return $('[component="category"]').filter(function (i, e) {

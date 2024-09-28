@@ -73,7 +73,12 @@ define('forum/topic', [
 		$(window).on('scroll', utils.debounce(updateTopicTitle, 250));
 
 		handleTopicSearch();
+		console.log("///////////topic.js///////////////");
+		console.log(ajaxify.data);
 
+		handleSolvedButton();
+		console.log("///////////topic tid///////////////");
+		console.log(tid);
 		hooks.fire('action:topic.loaded', ajaxify.data);
 	};
 
@@ -138,6 +143,27 @@ define('forum/topic', [
 			navigator.scrollBottom(postCount - 1);
 		});
 	};
+
+	function handleSolvedButton() {
+		const solvedButton = document.querySelector('[component="topic/solve"]');
+		let solveState = solvedButton.querySelector('.card-header')
+		console.log(solveState.innerText);
+		console.log(solvedButton);
+		solvedButton.addEventListener('click', function(){
+			console.log("solveBtnClicked");
+			if(solveState.innerText == "Solved"){
+				solveState.innerText = "Unsolved";
+				solveState.classList.remove('bg-success');
+				solveState.classList.add('bg-danger');
+			}else{
+				solveState.innerText = "Solved";
+				solveState.classList.remove('bg-danger');
+				solveState.classList.add('bg-success');
+			}
+		})
+	}
+
+
 
 	function handleBookmark(tid) {
 		if (window.location.hash) {
