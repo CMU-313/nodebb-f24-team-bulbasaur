@@ -74,22 +74,24 @@ define('topicList', [
 	};
 
 	function handleSolvedButton() {
-		const solvedButton = document.querySelector('[component="topic/solve"]');
-		let solveState = solvedButton.querySelector('.card-header')
-		console.log(solveState.innerText);
-		console.log(solvedButton);
-		solvedButton.addEventListener('click', function(){
-			console.log("solveBtnClicked");
-			if(solveState.innerText == "Solved"){
-				solveState.innerText = "Unsolved";
-				solveState.classList.remove('bg-success');
-				solveState.classList.add('bg-danger');
-			}else{
-				solveState.innerText = "Solved";
-				solveState.classList.remove('bg-danger');
-				solveState.classList.add('bg-success');
-			}
-		})
+		const solvedButton = document.querySelectorAll('[component="topic/solve"]');
+
+		for(let i = 0; i < solvedButton.length; i++){
+			let solveState = solvedButton[i].querySelector('.card-header')
+			solvedButton[i].addEventListener('click', function(){
+				
+				console.log("solveBtnClicked");
+				if(solveState.innerText == "Solved"){
+					solveState.innerText = "Unsolved";
+					solveState.classList.remove('bg-success');
+					solveState.classList.add('bg-danger');
+				}else{
+					solveState.innerText = "Solved";
+					solveState.classList.remove('bg-danger');
+					solveState.classList.add('bg-success');
+				}
+			})
+		}
 	}
 
 	function findTopicListElement() {
