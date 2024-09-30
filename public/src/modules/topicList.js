@@ -79,17 +79,38 @@ define('topicList', [
 		for(let i = 0; i < solvedButton.length; i++){
 			let solveState = solvedButton[i].querySelector('.card-header')
 			solvedButton[i].addEventListener('click', function(){
-				
 				console.log("solveBtnClicked");
-				if(solveState.innerText == "Solved"){
-					solveState.innerText = "Unsolved";
-					solveState.classList.remove('bg-success');
-					solveState.classList.add('bg-danger');
-				}else{
+	
+				const isSolved = solveState.innerText === "Solved";
+				const newState = !isSolved;
+				
+				// Update UI
+				if (newState) {
 					solveState.innerText = "Solved";
 					solveState.classList.remove('bg-danger');
 					solveState.classList.add('bg-success');
+				} else {
+					solveState.innerText = "Unsolved";
+					solveState.classList.remove('bg-success');
+					solveState.classList.add('bg-danger');
 				}
+		
+				// Get topic ID
+				const tid = ajaxify.data.tid;
+		
+				// API call to update the backend
+				api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
+					if (err) {
+						console.log('dom error', err);
+						return alerts.error(err);
+					}
+		
+					// Optionally, fire a custom event to notify other parts of the app
+					hooks.fire('action:topic.toggleSolved', {
+						tid: tid,
+						solved: newState
+					});
+				});
 			})
 		}
 	}

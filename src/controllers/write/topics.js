@@ -207,3 +207,10 @@ Topics.bump = async (req, res) => {
 
 	helpers.formatApiResponse(200, res);
 };
+
+Topics.solved = async (req, res) => {
+	console.log('req.params.tid', req.params.tid);
+	await api.topics.solved({ tid: req.params.tid });
+	helpers.formatApiResponse(200, res);
+};
+

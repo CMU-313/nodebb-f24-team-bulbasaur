@@ -298,3 +298,7 @@ topicsAPI.bump = async (caller, { tid }) => {
 	await topics.markAsUnreadForAll(tid);
 	topics.pushUnreadCount(caller.uid);
 };
+
+topicsAPI.solved = async function (data) {
+	topics.markAsSolved(data.tid);
+};
