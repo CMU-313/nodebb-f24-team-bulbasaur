@@ -12,7 +12,7 @@ const intFields = [
 	'tid', 'cid', 'uid', 'mainPid', 'postcount',
 	'viewcount', 'postercount', 'deleted', 'locked', 'pinned',
 	'pinExpiry', 'timestamp', 'upvotes', 'downvotes', 'lastposttime',
-	'deleterUid', 'solved'
+	'deleterUid', 'solved',
 ];
 
 module.exports = function (Topics) {
@@ -35,8 +35,6 @@ module.exports = function (Topics) {
 			keys: keys,
 		});
 		result.topics.forEach(topic => modifyTopic(topic, fields));
-		console.log("///////////getTopicsFields///////////////");
-		console.log(result.topics);
 		return result.topics;
 	};
 
