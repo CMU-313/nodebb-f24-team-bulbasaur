@@ -16,6 +16,13 @@ const plugins = require('../plugins');
 
 module.exports = function (Topics) {
     Topics.markAsSolved = async function (tid) {
+		console.log('Topics.markAsSolved')
 		db.setObjectField(`topic:${tid}`, 'solved', 1);
+	}
+
+	Topics.markAsUnsolve = async function (tid) {
+		console.log('Topics.markAsUnsolve')
+		console.log("tid", tid)
+		db.setObjectField(`topic:${tid}`, 'solved', 0);
 	}
 };

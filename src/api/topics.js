@@ -300,5 +300,13 @@ topicsAPI.bump = async (caller, { tid }) => {
 };
 
 topicsAPI.solved = async function (data) {
+	console.log('topicsAPI.solved');
+	console.log('data', data);
 	topics.markAsSolved(data.tid);
+};
+
+topicsAPI.unsolve = async function (data) {
+	console.log('topicsAPI.unsolve');
+	console.log('data', data);
+	topics.markAsUnsolve(data.tid);
 };

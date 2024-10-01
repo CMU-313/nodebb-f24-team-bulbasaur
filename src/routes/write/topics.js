@@ -49,6 +49,7 @@ module.exports = function () {
 	setupApiRoute(router, 'delete', '/:tid/read', [...middlewares, middleware.assert.topic], controllers.write.topics.markUnread);
 	setupApiRoute(router, 'put', '/:tid/bump', [...middlewares, middleware.assert.topic], controllers.write.topics.bump);
 	setupApiRoute(router, 'put', '/:tid/solved', [...middlewares, middleware.assert.topic], controllers.write.topics.solved);
+	setupApiRoute(router, 'put', '/:tid/unsolve', [...middlewares, middleware.assert.topic], controllers.write.topics.unsolve);
 
 	return router;
 };

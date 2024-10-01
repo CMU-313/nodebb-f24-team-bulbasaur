@@ -169,18 +169,37 @@ define('forum/topic', [
 			const tid = ajaxify.data.tid;
 	
 			// API call to update the backend
-			api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
-				if (err) {
-					console.log('dom error', err);
-					return alerts.error(err);
-				}
-	
-				// Optionally, fire a custom event to notify other parts of the app
-				hooks.fire('action:topic.toggleSolved', {
-					tid: tid,
-					solved: newState
+			if (newState) {
+				api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
+					if (err) {
+						console.log('dom error', err);
+						return alerts.error(err);
+					}
+		
+					// Optionally, fire a custom event to notify other parts of the app
+					hooks.fire('action:topic.toggleSolved', {
+						tid: tid,
+						solved: newState
+					});
 				});
-			});
+			} else {
+				console.log('unsolve-button')
+				console.log('//////////////////////////')
+				api.put(`/topics/${tid}/unsolve`, { solved: !newState }, function (err) {
+					console.log('//////////////////////////')
+					if (err) {
+						console.log('dom error', err);
+						return alerts.error(err);
+					}
+					console.log('no error')
+		
+					// Optionally, fire a custom event to notify other parts of the app
+					hooks.fire('action:topic.toggleSolved', {
+						tid: tid,
+						solved: newState
+					});
+				});
+			}
 		});
 	}
 

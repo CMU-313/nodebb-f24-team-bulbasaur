@@ -1,0 +1,50 @@
+put:
+  tags:
+    - topics
+  summary: Mark topic solved or unsolved
+  description: This operation marks a topic as solved or unsolved for the calling user.
+  parameters:
+    - in: path
+      name: tid
+      schema:
+        type: string
+      required: true
+      description: A valid topic ID
+      example: '2'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            solved:
+              type: boolean
+              description: Whether the topic is solved (true) or unsolved (false)
+              example: true
+  responses:
+    '200':
+      description: Topic successfully marked as solved or unsolved
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                $ref: ../../../components/schemas/Status.yaml#/Status
+              response:
+                type: object
+                properties: {}
+    '404':
+      description: Topic not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "error"
+              message:
+                type: string
+                example: "Topic not found."
