@@ -8,7 +8,8 @@ define('topicList', [
 	'tagFilter',
 	'forum/category/tools',
 	'hooks',
-], function (infinitescroll, handleBack, topicSelect, categoryFilter, tagFilter, categoryTools, hooks) {
+	'api',
+], function (infinitescroll, handleBack, topicSelect, categoryFilter, tagFilter, categoryTools, hooks, api) {
 	const TopicList = {};
 	let templateName = '';
 
@@ -96,21 +97,41 @@ define('topicList', [
 				}
 		
 				// Get topic ID
-				const tid = ajaxify.data.tid;
+				const tid = ajaxify.data.topics[i].tid;
 		
 				// API call to update the backend
-				api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
-					if (err) {
-						console.log('dom error', err);
-						return alerts.error(err);
-					}
-		
-					// Optionally, fire a custom event to notify other parts of the app
-					hooks.fire('action:topic.toggleSolved', {
-						tid: tid,
-						solved: newState
+				if (newState) {
+					api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
+					
+						if (err) {
+							console.log('error', err);
+							return alerts.error(err);
+						}
+			
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleSolved', {
+							tid: tid,
+							solved: newState
+						});
 					});
-				});
+
+				} else {
+					api.put(`/topics/${tid}/unsolve`, { solved: newState }, function (err) {
+					
+						if (err) {
+							console.log('error', err);
+							return alerts.error(err);
+						}
+			
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleSolved', {
+							tid: tid,
+							solved: newState
+						});
+					});
+
+				}
+				
 			})
 		}
 	}
