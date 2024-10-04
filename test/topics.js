@@ -1151,9 +1151,9 @@ describe('Topic\'s', () => {
 
 
 		it('should load preview correctly', async () => {
-			let { response, body} = await request.get(`${nconf.get('url')}/api/category/${categoryObj.slug}`);
+			const { response, body } = await request.get(`${nconf.get('url')}/api/category/${categoryObj.slug}`);
 			assert.equal(response.statusCode, 200);
-			const topic = body.topics[0]; //test first topic
+			const topic = body.topics[0];
 			assert(topic);
 			assert.equal(topic.content.substring(0, 20), 'topic content'.substring(0, 20));
 		});
