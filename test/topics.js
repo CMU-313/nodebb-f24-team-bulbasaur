@@ -1151,16 +1151,12 @@ describe('Topic\'s', () => {
 
 
 		it('should load preview correctly', async () => {
-			const { body } = await request.get(`${nconf.get('url')}/api/category/${categoryObj.slug}`);
-			const topic = body.topics[0];
+			let { response, body} = await request.get(`${nconf.get('url')}/api/category/${categoryObj.slug}`);
+			assert.equal(response.statusCode, 200);
+			const topic = body.topics[0]; //test first topic
 			assert(topic);
-			// const { response, body2 } = await request.get(`${nconf.get('url')}/topic/${topicData.slug}`);
-			// assert.equal(response.statusCode, 200);
-			// assert(body2);
-			assert.equal(topic.content, 'topic content');
+			assert.equal(topic.content.substring(0, 20), 'topic content'.substring(0, 20));
 		});
-
-
 
 		it('should 404 if tid is not a number', async () => {
 			const { response } = await request.get(`${nconf.get('url')}/api/topic/pagination/nan`);
