@@ -1,7 +1,16 @@
 dist/
 yarn.lock
 npm-debug.log
-node_modules/
+
+node_modules/*
+!node_modules/nodebb-theme-harmony
+node_modules/nodebb-theme-harmony/*
+!node_modules/nodebb-theme-harmony/templates
+node_modules/nodebb-theme-harmony/templates/*
+!node_modules/nodebb-theme-harmony/templates/partials
+node_modules/nodebb-theme-harmony/templates/partials/*
+!node_modules/nodebb-theme-harmony/templates/partials/topics_list.tpl
+!node_modules/nodebb-theme-bulbasaur
 sftp-config.json
 config.json
 jsconfig.json

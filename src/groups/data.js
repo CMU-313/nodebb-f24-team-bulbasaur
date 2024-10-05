@@ -90,7 +90,6 @@ function modifyGroup(group, fields) {
 		db.parseIntFields(group, intFields, fields);
 		escapeGroupData(group);
 
-		console.log('MICHAEL LI');
 		setDefaultValues(group);
 
 		coverUrl(group, 'cover:url');

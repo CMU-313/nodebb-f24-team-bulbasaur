@@ -193,6 +193,9 @@ TopicObjectSlim:
   allOf:
     - type: object
       properties:
+        content:
+          type: string
+          nullable: true
         tid:
           type: number
           description: A topic identifier
