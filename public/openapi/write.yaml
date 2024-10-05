@@ -140,6 +140,10 @@ paths:
     $ref: 'write/topics.yaml'
   /topics/{tid}:
     $ref: 'write/topics/tid.yaml'
+  /topics/{tid}/solved:
+    $ref: 'write/topics/tid/solved.yaml'
+  /topics/{tid}/unsolve:
+    $ref: 'write/topics/tid/solved.yaml'
   /topics/{tid}/state:
     $ref: 'write/topics/tid/state.yaml'
   /topics/{tid}/lock:

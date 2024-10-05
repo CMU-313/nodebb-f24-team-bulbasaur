@@ -73,7 +73,9 @@ define('forum/topic', [
 		$(window).on('scroll', utils.debounce(updateTopicTitle, 250));
 
 		handleTopicSearch();
+		console.log(ajaxify.data);
 
+		handleSolvedButton();
 		hooks.fire('action:topic.loaded', ajaxify.data);
 	};
 
@@ -138,6 +140,64 @@ define('forum/topic', [
 			navigator.scrollBottom(postCount - 1);
 		});
 	};
+
+	function handleSolvedButton() {
+		const solvedButton = document.querySelector('[component="topic/solve"]');
+		const solveState = solvedButton.querySelector('.card-header');
+		if (!app.user.uid) {
+			alerts.error('[[error:not-logged-in]]');
+			return;
+		}
+		solvedButton.addEventListener('click', function () {
+			console.log('solveBtnClicked');
+			const isSolved = solveState.innerText === 'Solved';
+			const newState = !isSolved;
+			// Update UI
+			if (newState) {
+				solveState.innerText = 'Solved';
+				solveState.classList.remove('bg-danger');
+				solveState.classList.add('bg-success');
+			} else {
+				solveState.innerText = 'Unsolved';
+				solveState.classList.remove('bg-success');
+				solveState.classList.add('bg-danger');
+			}
+			// Get topic ID
+			const tid = ajaxify.data.tid;
+			// API call to update the backend
+			if (newState) {
+				api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
+					if (err) {
+						console.log('dom error', err);
+						return alerts.error(err);
+					}
+					// Optionally, fire a custom event to notify other parts of the app
+					hooks.fire('action:topic.toggleSolved', {
+						tid: tid,
+						solved: newState,
+					});
+				});
+			} else {
+				// console.log('unsolve-button')
+				// console.log('//////////////////////////')
+				api.put(`/topics/${tid}/unsolve`, { solved: !newState }, function (err) {
+					// console.log('//////////////////////////')
+					if (err) {
+						console.log('dom error', err);
+						return alerts.error(err);
+					}
+					console.log('no error');
+					// Optionally, fire a custom event to notify other parts of the app
+					hooks.fire('action:topic.toggleSolved', {
+						tid: tid,
+						solved: newState,
+					});
+				});
+			}
+		});
+	}
+
+
 
 	function handleBookmark(tid) {
 		if (window.location.hash) {

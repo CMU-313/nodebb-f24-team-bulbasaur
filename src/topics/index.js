@@ -15,6 +15,7 @@ const social = require('../social');
 
 const Topics = module.exports;
 
+require('./solved')(Topics);
 require('./data')(Topics);
 require('./create')(Topics);
 require('./delete')(Topics);

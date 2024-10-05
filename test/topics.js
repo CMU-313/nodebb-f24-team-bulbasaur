@@ -1863,6 +1863,7 @@ describe('Topic\'s', () => {
 		const socketTopics = require('../src/socket.io/topics');
 		let tid;
 		let followerUid;
+		let topic1;
 		before((done) => {
 			User.create({ username: 'follower' }, (err, uid) => {
 				if (err) {
@@ -1874,9 +1875,11 @@ describe('Topic\'s', () => {
 						return done(err);
 					}
 					tid = result.topicData.tid;
+					topic1 = result.topicData;
 					done();
 				});
 			});
+
 		});
 
 		it('should error if not logged in', async () => {
@@ -1887,6 +1890,7 @@ describe('Topic\'s', () => {
 				assert.equal(err.message, '[[error:not-logged-in]]');
 			}
 		});
+
 
 		it('should filter ignoring uids', async () => {
 			await apiTopics.ignore({ uid: followerUid }, { tid: tid });
