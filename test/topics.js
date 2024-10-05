@@ -1886,23 +1886,6 @@ describe('Topic\'s', () => {
 			}
 		});
 
-
-		it('should correctly change solved status in database', async () => {
-			console.log(topic1);
-			await apiTopics.solved({ tid: topic1.tid });
-			await apiTopics.solved({ tid: topic1.tid });
-			const solveStatus_before = topic1.solved;
-			console.log('SOLVE STATUS BEFORE');
-			console.log(solveStatus_before);
-			console.log(topic1);
-			// await apiTopics.unsolve({ tid: tid } );
-			// console.log('TOPIC1 TID' + topic1.tid);
-			// const solveStatus_after = (topic1.solved == 0) ? false : true;
-			// console.log('SOLVE STATUS AFTER ' + solveStatus_after)
-			assert.equal(solveStatus_before, 1);
-			// assert.equal(solveStatus_after, false);
-		});
-
 		it('should filter ignoring uids', async () => {
 			await apiTopics.ignore({ uid: followerUid }, { tid: tid });
 			const uids = await topics.filterIgnoringUids(tid, [adminUid, followerUid]);
@@ -1928,6 +1911,55 @@ describe('Topic\'s', () => {
 					assert(isFollowing);
 					done();
 				});
+			});
+		});
+	});
+
+	describe('topic solved and unsolved', () => {
+		// const socketTopics = require('../src/socket.io/topics');
+		// const apiTopics = require('../src/api/topics');
+		const topics = require('../src/topics');
+		let tid;
+		let topic1;
+		before((done) => {
+			topics.post({ uid: adminUid, title: 'topic title', content: 'some content', cid: topic.categoryId }, (err, result) => {
+				if (err) {
+					return done(err);
+				}
+				tid = result.topicData.tid;
+				topic1 = result.topicData;
+				done();
+			});
+		});
+
+		it('should error with topic that does not exist', async () => {
+			try {
+				await topics.markAsSolved({ tid: -1 });
+				assert(false);
+			} catch (err) {
+				assert.equal(err.message, '[[error:no-topic]]');
+			}
+		});
+
+		it('should mark topic as solved', (done) => {
+			topics.markAsSolved(tid, (err) => {
+				assert.ifError(err);
+				// socketTopics.isSolved(tid, (err, isSolved) => {
+				// 	assert.ifError(err);
+				// 	assert(isSolved);
+				// 	done();
+				// });
+			});
+		});
+
+		it('should mark topic as unsolved', (done) => {
+			topics.markAsUnsolve(tid, (err) => {
+				assert.ifError(err);
+				// socketTopics.isSolved(tid, (err, isSolved) => {
+				// 	assert.ifError(err);
+				// 	assert(!isSolved);
+				// 	done();
+				// });
 			});
 		});
 	});
