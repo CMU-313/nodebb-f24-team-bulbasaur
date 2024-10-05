@@ -1006,9 +1006,6 @@ describe('Topic\'s', () => {
 			});
 		});
 
-
-
-
 		it('should not update the user\'s bookmark', async () => {
 			await socketTopics.createTopicFromPosts({ uid: topic.userId }, {
 				title: 'Fork test, no bookmark update',
@@ -1148,7 +1145,6 @@ describe('Topic\'s', () => {
 			assert(body.topic);
 			assert(body.category);
 		});
-
 
 		it('should load preview correctly', async () => {
 			const { response, body } = await request.get(`${nconf.get('url')}/api/category/${categoryObj.slug}`);
@@ -1879,7 +1875,6 @@ describe('Topic\'s', () => {
 					done();
 				});
 			});
-
 		});
 
 		it('should error if not logged in', async () => {
@@ -1891,6 +1886,22 @@ describe('Topic\'s', () => {
 			}
 		});
 
+
+		it('should correctly change solved status in database', async () => {
+			console.log(topic1);
+			await apiTopics.solved({ tid: topic1.tid });
+			await apiTopics.solved({ tid: topic1.tid });
+			const solveStatus_before = topic1.solved;
+			console.log('SOLVE STATUS BEFORE');
+			console.log(solveStatus_before);
+			console.log(topic1);
+			// await apiTopics.unsolve({ tid: tid } );
+			// console.log('TOPIC1 TID' + topic1.tid);
+			// const solveStatus_after = (topic1.solved == 0) ? false : true;
+			// console.log('SOLVE STATUS AFTER ' + solveStatus_after)
+			assert.equal(solveStatus_before, 1);
+			// assert.equal(solveStatus_after, false);
+		});
 
 		it('should filter ignoring uids', async () => {
 			await apiTopics.ignore({ uid: followerUid }, { tid: tid });
