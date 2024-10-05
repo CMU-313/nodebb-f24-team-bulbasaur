@@ -85,7 +85,7 @@ define('forum/topic', [
 		console.log('post', posts);
 		for (let i = 0; i < posts.length; i++) {
 			const post = posts[i];
-			// const pid = parseInt(post.getAttribute('data-pid'));
+			const pid = parseInt(post.getAttribute('data-pid'));
 			const btn = post.querySelector('[component="topic/post/endorse"]');
 			if (btn) {
 				btn.addEventListener('click', function () {
@@ -95,6 +95,19 @@ define('forum/topic', [
 					newMessage.innerText = 'This reply is endorsed by an INSTRUCTOR';
 					message.appendChild(newMessage);
 					btn.remove();
+
+					api.put(`/posts/${pid}/endorse`, { endorsed: true }, function (err) {
+						if (err) {
+							console.log('dom error', err);
+							return alerts.error(err);
+						}
+						console.log('no error');
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleEndorse', {
+							pid: pid,
+							endorsed: true,
+						});
+					});
 				});
 			}
 		}
