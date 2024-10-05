@@ -20,7 +20,7 @@ The user can confirm if the preview content indeed aligns with the actual post c
 
 ### Automated Testing
 [**Our automated tests**](test/topics.js) guarantees that the preview content of the first topic
-on a categories page matches the actual content of the main post for that same topic according
+on a categories page is equal to the actual content of the main post for that same topic according
 to the specifications described above.
 We believe these tests are sufficent in terms of covering the changes we made as they align with
 how we implemented and generated the post preview content in the first place. A user themselves should
