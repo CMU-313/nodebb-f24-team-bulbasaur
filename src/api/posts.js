@@ -527,5 +527,15 @@ postsAPI.getReplies = async (caller, { pid }) => {
 };
 
 postsAPI.endorse = async (caller, data) => {
-	posts.endorsePost(data.pid);
-};
+	console.log(caller.user);
+	console.log('postAPI.endorse', data);
+	const isAdmin = await user.isPrivileged(caller.user.uid);
+	console.log('isAdmin', isAdmin);
+	if (isAdmin){
+		console.log('yes');
+		posts.endorsePost(data.pid);
+	}else{
+		console.log('no')
+		throw new Error('[[error:no-privileges]]');
+	}
+}
