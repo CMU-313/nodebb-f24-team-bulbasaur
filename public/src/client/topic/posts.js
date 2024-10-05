@@ -39,7 +39,7 @@ define('forum/topic/posts', [
 		updatePostCounts(data.posts);
 		updateNavigatorLastPostTimestamp(data.posts[0]);
 		updatePostIndices(data.posts);
-
+		handleEndorseMBtn();
 		ajaxify.data.postcount += 1;
 		postTools.updatePostCount(ajaxify.data.postcount);
 
@@ -52,7 +52,10 @@ define('forum/topic/posts', [
 		require(['forum/topic/replies'], function (replies) {
 			replies.onNewPost(data);
 		});
+
+		
 	};
+
 
 	function updateNavigatorLastPostTimestamp(post) {
 		$('.pagination-block .pagebottom .timeago').timeago('update', post.timestampISO);
@@ -433,6 +436,7 @@ define('forum/topic/posts', [
 			}
 		});
 	}
+
 
 	Posts.addBlockquoteEllipses = function (posts) {
 		const rootBlockQuotes = posts.find('[component="post/content"] blockquote')

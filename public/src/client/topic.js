@@ -76,8 +76,30 @@ define('forum/topic', [
 		console.log(ajaxify.data);
 
 		handleSolvedButton();
+		handleEndorseButton();
 		hooks.fire('action:topic.loaded', ajaxify.data);
 	};
+
+	function handleEndorseButton() {
+		const posts = document.querySelectorAll('[component="post"]');
+		console.log('post', posts);
+		for(let i = 0; i < posts.length; i++) {
+			const post = posts[i];
+			const pid = parseInt(post.getAttribute('data-pid'));
+			const btn = post.querySelector('[component="topic/post/endorse"]');
+			if(btn){
+				btn.addEventListener('click', function() {
+					const message = post.querySelector('[component="topic/post/endorse-message"]');
+					let newMessage = document.createElement("span");
+					newMessage.classList.add("badge", "bg-primary");
+					newMessage.innerText = "This reply is endorsed by an INSTRUCTOR";
+					message.appendChild(newMessage);
+	
+					btn.remove();
+				})
+			}
+		}
+	}
 
 	function handleTopicSearch() {
 		require(['mousetrap'], (mousetrap) => {
