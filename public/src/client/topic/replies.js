@@ -50,7 +50,6 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts', 'api'], f
 					await posts.onNewPostsAddedToDom(html);
 					hooks.fire('action:posts.loaded', { posts: postData });
 				});
-				
 				console.log('postData', postData);
 			});
 		} else if (open.attr('loaded') === '1') {

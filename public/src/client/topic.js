@@ -83,20 +83,19 @@ define('forum/topic', [
 	function handleEndorseButton() {
 		const posts = document.querySelectorAll('[component="post"]');
 		console.log('post', posts);
-		for(let i = 0; i < posts.length; i++) {
+		for (let i = 0; i < posts.length; i++) {
 			const post = posts[i];
-			const pid = parseInt(post.getAttribute('data-pid'));
+			// const pid = parseInt(post.getAttribute('data-pid'));
 			const btn = post.querySelector('[component="topic/post/endorse"]');
-			if(btn){
-				btn.addEventListener('click', function() {
+			if (btn) {
+				btn.addEventListener('click', function () {
 					const message = post.querySelector('[component="topic/post/endorse-message"]');
-					let newMessage = document.createElement("span");
-					newMessage.classList.add("badge", "bg-primary");
-					newMessage.innerText = "This reply is endorsed by an INSTRUCTOR";
+					const newMessage = document.createElement('span');
+					newMessage.classList.add('badge', 'bg-primary');
+					newMessage.innerText = 'This reply is endorsed by an INSTRUCTOR';
 					message.appendChild(newMessage);
-	
 					btn.remove();
-				})
+				});
 			}
 		}
 	}

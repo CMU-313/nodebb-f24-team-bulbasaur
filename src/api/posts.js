@@ -525,3 +525,7 @@ postsAPI.getReplies = async (caller, { pid }) => {
 
 	return postData;
 };
+
+postsAPI.endorse = async (caller, data) => {
+	posts.endorsePost(data.pid);
+};

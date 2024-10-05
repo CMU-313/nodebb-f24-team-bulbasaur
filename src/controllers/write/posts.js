@@ -179,3 +179,8 @@ Posts.getReplies = async (req, res) => {
 
 	helpers.formatApiResponse(200, res, { replies });
 };
+
+Posts.endorse = async (req, res) => {
+	await api.posts.endorse(req, { pid: req.params.pid });
+	helpers.formatApiResponse(200, res);
+};

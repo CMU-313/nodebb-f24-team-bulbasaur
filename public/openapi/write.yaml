@@ -170,6 +170,8 @@ paths:
     $ref: 'write/topics/tid/bump.yaml'
   /tags/{tag}/follow:
     $ref: 'write/tags/tag/follow.yaml'
+  /posts/{pid}/endorse:
+    $ref: 'write/posts/pid/endorse.yaml'
   /posts/{pid}:
     $ref: 'write/posts/pid.yaml'
   /posts/{pid}/index:
