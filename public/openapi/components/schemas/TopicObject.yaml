@@ -196,6 +196,8 @@ TopicObjectSlim:
         content:
           type: string
           nullable: true
+        solved:
+          type: number
         tid:
           type: number
           description: A topic identifier
