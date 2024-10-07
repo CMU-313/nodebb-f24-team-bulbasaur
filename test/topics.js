@@ -1945,9 +1945,9 @@ describe('Topic\'s', () => {
 			topics.markAsSolved(tid, (err) => {
 				assert.ifError(err);
 				// socketTopics.isSolved(tid, (err, isSolved) => {
-				// 	assert.ifError(err);
-				// 	assert(isSolved);
-				// 	done();
+				// assert.ifError(err);
+				// assert(isSolved);
+				// done();
 				// });
 			});
 		});
@@ -1956,9 +1956,9 @@ describe('Topic\'s', () => {
 			topics.markAsUnsolve(tid, (err) => {
 				assert.ifError(err);
 				// socketTopics.isSolved(tid, (err, isSolved) => {
-				// 	assert.ifError(err);
-				// 	assert(!isSolved);
-				// 	done();
+				// assert.ifError(err);
+				// assert(!isSolved);
+				// done();
 				// });
 			});
 		});
