@@ -85,31 +85,30 @@ define('forum/topic', [
 		console.log('post', posts);
 		for (let i = 0; i < posts.length; i++) {
 			const post = posts[i];
-			const pid = parseInt(post.getAttribute('data-pid'));
+			const pid = parseInt(post.getAttribute('data-pid'), 10);
 			const btn = post.querySelector('[component="topic/post/endorse"]');
 			if (btn) {
 				btn.addEventListener('click', function () {
-					if (!app.user.uid){
+					if (!app.user.uid) {
 						alerts.error('[[error:not-logged-in]]');
-						return
+						return;
 					}
 					api.put(`/posts/${pid}/endorse`, { endorsed: true }, function (err) {
 						if (err) {
 							console.log('dom error', err);
 							return alerts.error(err);
-						} else{
-							const message = post.querySelector('[component="topic/post/endorse-message"]');
-							let newMessage = document.createElement("span");
-							newMessage.classList.add("badge", "bg-primary");
-							newMessage.innerText = "This reply is endorsed by an INSTRUCTOR";
-							message.appendChild(newMessage);
-							btn.remove();
-							// Optionally, fire a custom event to notify other parts of the app
-							hooks.fire('action:topic.toggleEndorse', {
-								pid: pid,
-								endorsed: true,
-							});
 						}
+						const message = post.querySelector('[component="topic/post/endorse-message"]');
+						const newMessage = document.createElement('span');
+						newMessage.classList.add('badge', 'bg-primary');
+						newMessage.innerText = 'This reply is endorsed by an INSTRUCTOR';
+						message.appendChild(newMessage);
+						btn.remove();
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleEndorse', {
+							pid: pid,
+							endorsed: true,
+						});
 					});
 				});
 			}
