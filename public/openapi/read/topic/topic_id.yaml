@@ -51,6 +51,10 @@ get:
                     items:
                       type: object
                       properties:
+                        endorsed:
+                          type: boolean
+                          description: Indicates if the topic is endorsed
+                          nullable: true
                         pid:
                           type: number
                         uid:

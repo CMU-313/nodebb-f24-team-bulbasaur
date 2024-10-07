@@ -24,6 +24,10 @@ get:
               response:
                 type: object
                 properties:
+                  endorsed:
+                    type: boolean
+                    description: Indicates if the topic is endorsed
+                    nullable: true
                   pid:
                     type: number
                   uid:
@@ -109,6 +113,10 @@ put:
                   - $ref: ../../components/schemas/PostObject.yaml#/PostObject
                   - type: object
                     properties:
+                      endorsed:
+                        type: boolean
+                        description: Indicates if the topic is endorsed
+                        nullable: true
                       edited:
                         type: boolean
                       deleterUid:
