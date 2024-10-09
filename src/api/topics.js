@@ -316,7 +316,9 @@ topicsAPI.unsolve = async function (caller, data) {
 		throw new Error('[[error:not-logged-in]]');
 	}
 
-	if (data.tid <= -1) {
+	const topicExists = await topics.exists(data.tid);
+
+	if (!topicExists) {
 		throw new Error('[[error:no-topic]]');
 	}
 

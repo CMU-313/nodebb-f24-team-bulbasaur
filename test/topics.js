@@ -2534,6 +2534,15 @@ describe('Topic\'s', () => {
 			assert.equal(testTopicAfter.solved, 1);
 		});
 
+		it('should mark topic as unsolved', async () => {
+			await apiTopics.solved({ user: { uid: uid } }, { tid: topic.topicData.tid });
+			const testTopicSolved = await db.getObject(`topic:${topic.topicData.tid}`);
+			assert.equal(testTopicSolved.solved, 1);
+			await apiTopics.unsolve({ user: { uid: uid } }, { tid: topic.topicData.tid });
+			const testTopicUnsolved = await db.getObject(`topic:${topic.topicData.tid}`);
+			assert.equal(testTopicUnsolved.solved, 0);
+		});
+
 		it('should error if not logged in', async () => {
 			try {
 				await apiTopics.solved({ user: { uid: 0 } }, { tid: topic.topicData.tid });
@@ -2550,15 +2559,6 @@ describe('Topic\'s', () => {
 			} catch (err) {
 				assert.equal(err.message, '[[error:no-topic]]');
 			}
-		});
-
-		it('should mark topic as unsolved', async () => {
-			await apiTopics.solved({ user: { uid: uid } }, { tid: topic.topicData.tid });
-			const testTopicSolved = await db.getObject(`topic:${topic.topicData.tid}`);
-			assert.equal(testTopicSolved.solved, 1);
-			await apiTopics.unsolve({ user: { uid: uid } }, { tid: topic.topicData.tid });
-			const testTopicUnsolved = await db.getObject(`topic:${topic.topicData.tid}`);
-			assert.equal(testTopicUnsolved.solved, 0);
 		});
 	});
 });
