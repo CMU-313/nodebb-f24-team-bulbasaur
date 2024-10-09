@@ -1086,7 +1086,6 @@ describe('Post\'s', () => {
 				content: 'Endorse me',
 			});
 			pid = topic.postData.pid;
-			
 		});
 
 		it('should error if user is not logged in', async () => {
@@ -1098,22 +1097,21 @@ describe('Post\'s', () => {
 		});
 
 		it('admins should endorse post', async () => {
-			const isPrivileged = await user.isPrivileged(uid)
+			const isPrivileged = await user.isPrivileged(uid);
 			assert(isPrivileged);
-			await apiPosts.endorse({ user: {uid: uid} }, { pid: pid });
-			let post = await db.getObject(`post:${pid}`);
+			await apiPosts.endorse({ user: { uid: uid } }, { pid: pid });
+			const post = await db.getObject(`post:${pid}`);
 			assert.equal(post.endorsed, 1);
 		});
 
 		it('should error if user is not a moderator', async () => {
 			try {
-				await apiPosts.endorse({ user: {uid: uid2} }, { pid: pid });
+				await apiPosts.endorse({ user: { uid: uid2 } }, { pid: pid });
 			} catch (err) {
 				assert.equal(err.message, '[[error:no-privileges]]');
 			}
 		});
-			
-	})
+	});
 	describe('Topic Backlinks', () => {
 		let tid1;
 		before(async () => {

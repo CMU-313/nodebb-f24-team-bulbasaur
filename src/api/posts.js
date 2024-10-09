@@ -530,8 +530,7 @@ postsAPI.endorse = async (caller, data) => {
 	const isAdmin = await user.isPrivileged(caller.user.uid);
 	if (!caller.user.uid) {
 		throw new Error('[[error:not-logged-in]]');
-	}
-	else if (isAdmin) {
+	} else if (isAdmin) {
 		await posts.endorsePost(data.pid);
 	} else {
 		throw new Error('[[error:no-privileges]]');
