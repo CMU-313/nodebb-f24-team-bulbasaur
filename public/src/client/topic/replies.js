@@ -26,7 +26,7 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts', 'api'], f
 
 				postData.forEach((post, index) => {
 					if (post) {
-						post.index = index;
+						post.index = index + 1;
 					}
 				});
 				posts.modifyPostsByPrivileges(postData);

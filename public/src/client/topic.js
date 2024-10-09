@@ -110,6 +110,7 @@ define('forum/topic', [
 							endorsed: true,
 						});
 					});
+					alerts.success('Post marked as Endorsed');
 				});
 			}
 		}
