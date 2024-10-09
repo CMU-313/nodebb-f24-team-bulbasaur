@@ -1915,55 +1915,6 @@ describe('Topic\'s', () => {
 		});
 	});
 
-	describe('topic solved and unsolved', () => {
-		// const socketTopics = require('../src/socket.io/topics');
-		// const apiTopics = require('../src/api/topics');
-		const topics = require('../src/topics');
-		let tid;
-		let topic1;
-		before((done) => {
-			topics.post({ uid: adminUid, title: 'topic title', content: 'some content', cid: topic.categoryId }, (err, result) => {
-				if (err) {
-					return done(err);
-				}
-				tid = result.topicData.tid;
-				topic1 = result.topicData;
-				done();
-			});
-		});
-
-		it('should error with topic that does not exist', async () => {
-			try {
-				await topics.markAsSolved({ tid: -1 });
-				assert(false);
-			} catch (err) {
-				assert.equal(err.message, '[[error:no-topic]]');
-			}
-		});
-
-		it('should mark topic as solved', (done) => {
-			topics.markAsSolved(tid, (err) => {
-				assert.ifError(err);
-				// socketTopics.isSolved(tid, (err, isSolved) => {
-				// assert.ifError(err);
-				// assert(isSolved);
-				// done();
-				// });
-			});
-		});
-
-		it('should mark topic as unsolved', (done) => {
-			topics.markAsUnsolve(tid, (err) => {
-				assert.ifError(err);
-				// socketTopics.isSolved(tid, (err, isSolved) => {
-				// assert.ifError(err);
-				// assert(!isSolved);
-				// done();
-				// });
-			});
-		});
-	});
-
 	describe('topics search', () => {
 		it('should error with invalid data', async () => {
 			try {
@@ -2560,6 +2511,59 @@ describe('Topic\'s', () => {
 		it('should remove from topics:scheduled on purge', async () => {
 			const score = await db.sortedSetScore('topics:scheduled', topicData.tid);
 			assert(!score);
+		});
+	});
+	describe('topic solved and unsolved', () => {
+		// const socketTopics = require('../src/socket.io/topics');
+		// const apiTopics = require('../src/api/topics');
+		let uid;
+		let topic;
+		before(async () => {
+			uid = await User.create({ username: 'topicPoster' });
+			topic = await topics.post({ 
+				uid: uid, 
+				title: 'topic title', 
+				content: 'some content', 
+				cid: categoryObj.cid 
+			});
+		});
+
+		//SOLVED
+		it('should mark topic as solved', async () => {
+			console.log('///////////SOLVE TEST//////////////')
+			let testTopicBefore = await db.getObject(`topic:${topic.topicData.tid}`);
+			assert.equal(testTopicBefore.solved, 0);
+			await apiTopics.solved({ user: { uid: uid } }, {tid: topic.topicData.tid});
+			let testTopicAfter = await db.getObject(`topic:${topic.topicData.tid}`);
+			assert.equal(testTopicAfter.solved, 1);
+		});
+
+		it('should error if not logged in', async () => {
+			try{
+				await apiTopics.solved({ user: { uid: uid } }, {tid: topic.topicData.tid});
+			}catch(err){
+				assert.equal(err.message, '[[error:not-logged-in]]');
+			}
+		})
+
+		it('should error with topic that does not exist', async () => {
+			try {
+				await topics.markAsSolved({ tid: -1 });
+				assert(false);
+			} catch (err) {
+				assert.equal(err.message, '[[error:no-topic]]');
+			}
+		});
+
+		it('should mark topic as unsolved', (done) => {
+			topics.markAsUnsolve(tid, (err) => {
+				assert.ifError(err);
+				// socketTopics.isSolved(tid, (err, isSolved) => {
+				// assert.ifError(err);
+				// assert(!isSolved);
+				// done();
+				// });
+			});
 		});
 	});
 });
