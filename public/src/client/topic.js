@@ -144,7 +144,6 @@ define('forum/topic', [
 	function handleSolvedButton() {
 		const solvedButton = document.querySelector('[component="topic/solve"]');
 		const solveState = solvedButton.querySelector('.card-header');
-		
 		solvedButton.addEventListener('click', function () {
 			console.log('solveBtnClicked');
 			const isSolved = solveState.innerText === 'Solved';
