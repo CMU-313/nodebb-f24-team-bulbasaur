@@ -1109,8 +1109,6 @@ describe('Post\'s', () => {
 				await apiPosts.endorse({ user: { uid: uid } }, { pid: -1 });
 				assert(false);
 			} catch (err) {
-				console.log('////////////NO POST////////////');
-				console.log(err.message);
 				assert.equal(err.message, '[[error:no-post]]');
 			}
 		});
