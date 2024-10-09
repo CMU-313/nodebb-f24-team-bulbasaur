@@ -177,6 +177,7 @@ define('forum/topic', [
 						solved: newState,
 					});
 				});
+				alerts.success('Topic marked as Solved');
 			} else {
 				// console.log('unsolve-button')
 				// console.log('//////////////////////////')
@@ -192,6 +193,7 @@ define('forum/topic', [
 						tid: tid,
 						solved: newState,
 					});
+					alerts.success('Topic marked Unsolved');
 				});
 			}
 		});
