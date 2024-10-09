@@ -144,14 +144,15 @@ define('forum/topic', [
 	function handleSolvedButton() {
 		const solvedButton = document.querySelector('[component="topic/solve"]');
 		const solveState = solvedButton.querySelector('.card-header');
-		if (!app.user.uid) {
-			alerts.error('[[error:not-logged-in]]');
-			return;
-		}
+		
 		solvedButton.addEventListener('click', function () {
 			console.log('solveBtnClicked');
 			const isSolved = solveState.innerText === 'Solved';
 			const newState = !isSolved;
+			if (!app.user.uid) {
+				alerts.error('[[error:not-logged-in]]');
+				return;
+			}
 			// Update UI
 			if (newState) {
 				solveState.innerText = 'Solved';
