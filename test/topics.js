@@ -2514,56 +2514,51 @@ describe('Topic\'s', () => {
 		});
 	});
 	describe('topic solved and unsolved', () => {
-		// const socketTopics = require('../src/socket.io/topics');
-		// const apiTopics = require('../src/api/topics');
 		let uid;
 		let topic;
 		before(async () => {
 			uid = await User.create({ username: 'topicPoster' });
-			topic = await topics.post({ 
-				uid: uid, 
-				title: 'topic title', 
-				content: 'some content', 
-				cid: categoryObj.cid 
+			topic = await topics.post({
+				uid: uid,
+				title: 'topic title',
+				content: 'some content',
+				cid: categoryObj.cid,
 			});
 		});
 
-		//SOLVED
 		it('should mark topic as solved', async () => {
-			console.log('///////////SOLVE TEST//////////////')
-			let testTopicBefore = await db.getObject(`topic:${topic.topicData.tid}`);
+			const testTopicBefore = await db.getObject(`topic:${topic.topicData.tid}`);
 			assert.equal(testTopicBefore.solved, 0);
-			await apiTopics.solved({ user: { uid: uid } }, {tid: topic.topicData.tid});
-			let testTopicAfter = await db.getObject(`topic:${topic.topicData.tid}`);
+			await apiTopics.solved({ user: { uid: uid } }, { tid: topic.topicData.tid });
+			const testTopicAfter = await db.getObject(`topic:${topic.topicData.tid}`);
 			assert.equal(testTopicAfter.solved, 1);
 		});
 
 		it('should error if not logged in', async () => {
-			try{
-				await apiTopics.solved({ user: { uid: uid } }, {tid: topic.topicData.tid});
-			}catch(err){
+			try {
+				await apiTopics.solved({ user: { uid: 0 } }, { tid: topic.topicData.tid });
+				assert(false);
+			} catch (err) {
 				assert.equal(err.message, '[[error:not-logged-in]]');
 			}
-		})
+		});
 
 		it('should error with topic that does not exist', async () => {
 			try {
-				await topics.markAsSolved({ tid: -1 });
+				await apiTopics.solved({ user: { uid: uid } }, { tid: -1 });
 				assert(false);
 			} catch (err) {
 				assert.equal(err.message, '[[error:no-topic]]');
 			}
 		});
 
-		it('should mark topic as unsolved', (done) => {
-			topics.markAsUnsolve(tid, (err) => {
-				assert.ifError(err);
-				// socketTopics.isSolved(tid, (err, isSolved) => {
-				// assert.ifError(err);
-				// assert(!isSolved);
-				// done();
-				// });
-			});
+		it('should mark topic as unsolved', async () => {
+			await apiTopics.solved({ user: { uid: uid } }, { tid: topic.topicData.tid });
+			const testTopicSolved = await db.getObject(`topic:${topic.topicData.tid}`);
+			assert.equal(testTopicSolved.solved, 1);
+			await apiTopics.unsolve({ user: { uid: uid } }, { tid: topic.topicData.tid });
+			const testTopicUnsolved = await db.getObject(`topic:${topic.topicData.tid}`);
+			assert.equal(testTopicUnsolved.solved, 0);
 		});
 	});
 });

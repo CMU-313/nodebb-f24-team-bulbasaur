@@ -300,19 +300,25 @@ topicsAPI.bump = async (caller, { tid }) => {
 };
 
 topicsAPI.solved = async function (caller, data) {
-	console.log('topicsAPI.solved');
-	console.log('data', data);
-	if(!caller.user.uid) {
+	if (!caller.user.uid) {
 		throw new Error('[[error:not-logged-in]]');
 	}
+
+	if (data.tid <= -1) {
+		throw new Error('[[error:no-topic]]');
+	}
+
 	return await topics.markAsSolved(data.tid);
 };
 
 topicsAPI.unsolve = async function (caller, data) {
-	console.log('topicsAPI.unsolve');
-	console.log('data', data);
-	if(!caller.user.uid) {
+	if (!caller.user.uid) {
 		throw new Error('[[error:not-logged-in]]');
 	}
+
+	if (data.tid <= -1) {
+		throw new Error('[[error:no-topic]]');
+	}
+
 	return await topics.markAsUnsolve(data.tid);
 };
