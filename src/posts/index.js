@@ -101,8 +101,14 @@ Posts.modifyPostByPrivilege = function (post, privileges) {
 	}
 };
 
-Posts.endorsePost = function (pid) {
-	return db.setObjectField(`post:${pid}`, 'endorsed', 1);
-};
+Posts.endorsePost = async function (pid) {
+	let post = await db.getObject(`post:${pid}`);
+    
+	await db.setObjectField(`post:${pid}`, 'endorsed', 1);
+    
+	let post2 = await db.getObject(`post:${pid}`);
+    
+	return;
+}
 
 require('../promisify')(Posts);
