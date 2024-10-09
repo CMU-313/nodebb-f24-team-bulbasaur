@@ -1104,9 +1104,21 @@ describe('Post\'s', () => {
 			assert.equal(post.endorsed, 1);
 		});
 
+		it('should error with topic that does not exist', async () => {
+			try {
+				await apiPosts.endorse({ user: { uid: uid } }, { pid: -1 });
+				assert(false);
+			} catch (err) {
+				console.log('////////////NO POST////////////');
+				console.log(err.message);
+				assert.equal(err.message, '[[error:no-post]]');
+			}
+		});
+
 		it('should error if user is not a moderator', async () => {
 			try {
 				await apiPosts.endorse({ user: { uid: uid2 } }, { pid: pid });
+				assert(false);
 			} catch (err) {
 				assert.equal(err.message, '[[error:no-privileges]]');
 			}
