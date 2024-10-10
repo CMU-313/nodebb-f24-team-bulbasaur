@@ -193,8 +193,6 @@ TopicObjectSlim:
   allOf:
     - type: object
       properties:
-        solved:
-          type: number
         content:
           type: string
           nullable: true
