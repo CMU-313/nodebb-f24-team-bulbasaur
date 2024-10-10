@@ -38,8 +38,9 @@ Upon navigating into a specific topic to view posts under that topic, the main t
 To toggle between solved and unsolved, simply click the "Solved" or "Unsolved" button and the change will be immediately reflected. The user has to be logged in to use this feature. If not, an error message will appear to alert the user that they have to be logged in.
 
 
-![Sample Solved Button on Categories Page](UserGuideScreenshots/US2_solved_categories.jpg)
-![Sample Solved Button on Topic Page](UserGuideScreenshots/US2_solved_topic.jpg)
+![Sample Solved Button on Categories Page](UserGuideScreenshots/us2-in-category.jpg)
+![Sample Solved Button on Topic Page](UserGuideScreenshots/us2-mark-solve.jpg)
+![Sample Unsolved Button on Topic Page](UserGuideScreenshots/us2-mark-unsolve.jpg)
 
 ### User Testing
 While logged out, a user should click on the "Solved" or "Unsolved" button, and assert that an error message to prompt user to log in pops up when they click on the button.
@@ -67,10 +68,12 @@ is enorsed by an INSTRUCTOR."
 If a particular post has not been endorsed yet, yet you will a blue button with the text "Endorse." 
 Clicking this button will mark the post as endorsed via the banner described above. However, user must be
 logged in and have privileges as in instructor in order for this button click to be successful. Otherwise,
-an error message will appear on NodeBB saying "You do not have enough privileges for this action."
+an error message will appear on NodeBB saying either "You don't seem to be logged in."
+or "You do not have enough privileges for this action."
 
-![Sample Endorse Button](UserGuideScreenshots/US4_feature.jpg)
-![Sample Endorse Error for Not-Logged-In User](UserGuideScreenshots/US4_Error.jpg)
+![Sample Endorse Button](UserGuideScreenshots/us4-feature-success.jpg)
+![Sample Endorse Error for Not-Logged-In User](UserGuideScreenshots/us4-login-error.jpg)
+![Sample Endorse Error for Non-Admin User](UserGuideScreenshots/us4-privilege-error.jpg)
 
 
 ### User Testing
