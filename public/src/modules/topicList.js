@@ -8,7 +8,9 @@ define('topicList', [
 	'tagFilter',
 	'forum/category/tools',
 	'hooks',
-], function (infinitescroll, handleBack, topicSelect, categoryFilter, tagFilter, categoryTools, hooks) {
+	'api',
+	'alerts',
+], function (infinitescroll, handleBack, topicSelect, categoryFilter, tagFilter, categoryTools, hooks, api, alerts) {
 	const TopicList = {};
 	let templateName = '';
 
@@ -67,9 +69,65 @@ define('topicList', [
 		$('#load-more-btn').on('click', function () {
 			TopicList.loadMoreTopics(1);
 		});
-
+		// console.log('///////////topicList.init///////////////');
+		console.log(ajaxify.data.topics);
+		handleSolvedButton();
 		hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
 	};
+
+	function handleSolvedButton() {
+		const solvedButton = document.querySelectorAll('[component="topic/solve"]');
+
+		for (let i = 0; i < solvedButton.length; i++) {
+			const solveState = solvedButton[i].querySelector('.card-header');
+			solvedButton[i].addEventListener('click', function () {
+				if (!app.user.uid) {
+					alerts.error('[[error:not-logged-in]]');
+					return;
+				}
+				const isSolved = solveState.innerText === 'Solved';
+				const newState = !isSolved;
+				// Update UI
+				if (newState) {
+					solveState.innerText = 'Solved';
+					solveState.classList.remove('bg-danger');
+					solveState.classList.add('bg-success');
+				} else {
+					solveState.innerText = 'Unsolved';
+					solveState.classList.remove('bg-success');
+					solveState.classList.add('bg-danger');
+				}
+				// Get topic ID
+				const tid = ajaxify.data.topics[i].tid;
+				// API call to update the backend
+				if (newState) {
+					api.put(`/topics/${tid}/solved`, { solved: newState }, function (err) {
+						if (err) {
+							console.log('error', err);
+							return alerts.error(err);
+						}
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleSolved', {
+							tid: tid,
+							solved: newState,
+						});
+					});
+				} else {
+					api.put(`/topics/${tid}/unsolve`, { solved: newState }, function (err) {
+						if (err) {
+							console.log('error', err);
+							return alerts.error(err);
+						}
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleSolved', {
+							tid: tid,
+							solved: newState,
+						});
+					});
+				}
+			});
+		}
+	}
 
 	function findTopicListElement() {
 		return $('[component="category"]').filter(function (i, e) {
