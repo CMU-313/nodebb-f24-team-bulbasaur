@@ -193,11 +193,11 @@ TopicObjectSlim:
   allOf:
     - type: object
       properties:
-        solved:
-          type: number
         content:
           type: string
           nullable: true
+        solved:
+          type: number
         tid:
           type: number
           description: A topic identifier

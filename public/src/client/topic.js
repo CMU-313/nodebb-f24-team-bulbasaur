@@ -76,8 +76,45 @@ define('forum/topic', [
 		console.log(ajaxify.data);
 
 		handleSolvedButton();
+		handleEndorseButton();
 		hooks.fire('action:topic.loaded', ajaxify.data);
 	};
+
+	function handleEndorseButton() {
+		const posts = document.querySelectorAll('[component="post"]');
+		console.log('post', posts);
+		for (let i = 0; i < posts.length; i++) {
+			const post = posts[i];
+			const pid = parseInt(post.getAttribute('data-pid'), 10);
+			const btn = post.querySelector('[component="topic/post/endorse"]');
+			if (btn) {
+				btn.addEventListener('click', function () {
+					if (!app.user.uid) {
+						alerts.error('[[error:not-logged-in]]');
+						return;
+					}
+					api.put(`/posts/${pid}/endorse`, { endorsed: true }, function (err) {
+						if (err) {
+							console.log('dom error', err);
+							return alerts.error(err);
+						}
+						const message = post.querySelector('[component="topic/post/endorse-message"]');
+						const newMessage = document.createElement('span');
+						newMessage.classList.add('badge', 'bg-primary');
+						newMessage.innerText = `This reply is endorsed by an INSTRUCTOR`;
+						message.appendChild(newMessage);
+						btn.remove();
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleEndorse', {
+							pid: pid,
+							endorsed: true,
+						});
+						alerts.success('Post marked as Endorsed');
+					});
+				});
+			}
+		}
+	}
 
 	function handleTopicSearch() {
 		require(['mousetrap'], (mousetrap) => {
@@ -144,14 +181,14 @@ define('forum/topic', [
 	function handleSolvedButton() {
 		const solvedButton = document.querySelector('[component="topic/solve"]');
 		const solveState = solvedButton.querySelector('.card-header');
+		if (!app.user.uid) {
+			alerts.error('[[error:not-logged-in]]');
+			return;
+		}
 		solvedButton.addEventListener('click', function () {
 			console.log('solveBtnClicked');
 			const isSolved = solveState.innerText === 'Solved';
 			const newState = !isSolved;
-			if (!app.user.uid) {
-				alerts.error('[[error:not-logged-in]]');
-				return;
-			}
 			// Update UI
 			if (newState) {
 				solveState.innerText = 'Solved';
@@ -193,8 +230,8 @@ define('forum/topic', [
 						tid: tid,
 						solved: newState,
 					});
-					alerts.success('Topic marked Unsolved');
 				});
+				alerts.success('Topic marked Unsolved');
 			}
 		});
 	}

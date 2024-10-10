@@ -26,7 +26,7 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts', 'api'], f
 
 				postData.forEach((post, index) => {
 					if (post) {
-						post.index = index;
+						post.index = index + 1;
 					}
 				});
 				posts.modifyPostsByPrivileges(postData);
@@ -50,6 +50,8 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts', 'api'], f
 					await posts.onNewPostsAddedToDom(html);
 					hooks.fire('action:posts.loaded', { posts: postData });
 				});
+				console.log('postData', postData);
+				console.log('tplData', tplData);
 			});
 		} else if (open.attr('loaded') === '1') {
 			open.removeAttr('loaded')
