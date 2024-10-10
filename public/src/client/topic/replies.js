@@ -51,6 +51,7 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts', 'api'], f
 					hooks.fire('action:posts.loaded', { posts: postData });
 				});
 				console.log('postData', postData);
+				console.log('tplData', tplData);
 			});
 		} else if (open.attr('loaded') === '1') {
 			open.removeAttr('loaded')

@@ -101,7 +101,7 @@ define('forum/topic', [
 						const message = post.querySelector('[component="topic/post/endorse-message"]');
 						const newMessage = document.createElement('span');
 						newMessage.classList.add('badge', 'bg-primary');
-						newMessage.innerText = 'This reply is endorsed by an INSTRUCTOR';
+						newMessage.innerText = `This reply is endorsed by an INSTRUCTOR`;
 						message.appendChild(newMessage);
 						btn.remove();
 						// Optionally, fire a custom event to notify other parts of the app
@@ -109,8 +109,8 @@ define('forum/topic', [
 							pid: pid,
 							endorsed: true,
 						});
+						alerts.success('Post marked as Endorsed');
 					});
-					alerts.success('Post marked as Endorsed');
 				});
 			}
 		}

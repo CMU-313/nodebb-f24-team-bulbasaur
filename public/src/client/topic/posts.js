@@ -11,7 +11,10 @@ define('forum/topic/posts', [
 	'translator',
 	'hooks',
 	'helpers',
-], function (pagination, infinitescroll, postTools, images, navigator, components, translator, hooks, helpers) {
+	'api',
+	'alerts',
+], function (pagination, infinitescroll, postTools, images, navigator,
+	components, translator, hooks, helpers, api, alerts) {
 	const Posts = { };
 
 	Posts.signaturesShown = {};
@@ -245,6 +248,59 @@ define('forum/topic/posts', [
 		});
 	}
 
+	function handleSingleEndorseButton(posts) {
+		for (let i = 0; i < posts.length; i += 2) {
+			const post = posts[i];
+			const pid = parseInt(post.getAttribute('data-pid'), 10);
+			const btn = post.querySelector('[component="topic/post/endorse"]');
+			if (btn) {
+				btn.addEventListener('click', function () {
+					if (!app.user.uid) {
+						alerts.error('[[error:not-logged-in]]');
+						return;
+					}
+					api.put(`/posts/${pid}/endorse`, { endorsed: true }, function (err) {
+						if (err) {
+							console.log('dom error', err);
+							return alerts.error(err);
+						}
+						const message = post.querySelector('[component="topic/post/endorse-message"]');
+						const newMessage = document.createElement('span');
+						newMessage.classList.add('badge', 'bg-primary');
+						newMessage.innerText = `This reply is endorsed by an INSTRUCTOR`;
+						message.appendChild(newMessage);
+						btn.remove();
+						const allPosts = document.querySelectorAll('[component="post"]');
+						console.log('ALL POSTS', allPosts);
+						const foundPost = [];
+						for (let i = 0; i < allPosts.length; i++) {
+							const currPID = allPosts[i].getAttribute('data-pid');
+							if ((parseInt(currPID, 10) === parseInt(pid, 10))) {
+								console.log('FOUND IT', allPosts[i]);
+								foundPost.push(allPosts[i]);
+							}
+						}
+						const container = foundPost[1].querySelector('[component="topic/post/endorse-message"]');
+						const addMessage = document.createElement('span');
+						addMessage.classList.add('badge', 'bg-primary');
+						addMessage.innerText = `This reply is endorsed by an INSTRUCTOR`;
+						container.appendChild(addMessage);
+						const currBtn = foundPost[1].querySelector('[component="topic/post/endorse"]');
+						if (currBtn) {
+							currBtn.remove();
+						}
+						// Optionally, fire a custom event to notify other parts of the app
+						hooks.fire('action:topic.toggleEndorse', {
+							pid: pid,
+							endorsed: true,
+						});
+						alerts.success('Post marked as Endorsed');
+					});
+				});
+			}
+		}
+	}
+
 	Posts.loadMorePosts = function (direction) {
 		if (!components.get('topic').length || navigator.scrollActive) {
 			return;
@@ -409,6 +465,7 @@ define('forum/topic/posts', [
 	}
 
 	Posts.onNewPostsAddedToDom = async function (posts) {
+		handleSingleEndorseButton(posts);
 		await Posts.onTopicPageLoad(posts);
 		posts.find('.timeago').timeago();
 	};
