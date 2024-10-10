@@ -209,12 +209,12 @@ Topics.bump = async (req, res) => {
 };
 
 Topics.solved = async (req, res) => {
-	await api.topics.solved({ tid: req.params.tid });
+	await api.topics.solved(req, { tid: req.params.tid });
 	helpers.formatApiResponse(200, res);
 };
 
 Topics.unsolve = async (req, res) => {
-	await api.topics.unsolve({ tid: req.params.tid });
+	await api.topics.unsolve(req, { tid: req.params.tid });
 	helpers.formatApiResponse(200, res);
 };
 
