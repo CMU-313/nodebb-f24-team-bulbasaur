@@ -53,10 +53,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'cmu-313/nodebb-frontend-f24-team-bulbasaur'
+      
+      - name: Theme directory location
         run: |
           pwd
-
       
+      - name: Theme directory ls
+        run: |
+          ls
+
       - name: Set up frontend theme
         run: |
           npm install nodebb-frontend-f24-team-bulbasaur
