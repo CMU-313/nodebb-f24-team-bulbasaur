@@ -45,15 +45,19 @@ jobs:
             "redis:port": "6379",
             "redis:password": "${{ secrets.REDIS_PASSWORD }}" }'
       
+      - name: Create theme directory
+        run: |
+          mkdir theme
+      
       - name: Checkout theme repository
         uses: actions/checkout@v4
         with:
           repository: 'cmu-313/nodebb-frontend-f24-team-bulbasaur'
-          path: '/home/runner/work/nodebb-f24-team-bulbsaur/nodebb-f24-team-bulbsaur/nodebb-frontend-f24-team-bulbasaur'
+          path: 'theme/nodebb-frontend-f24-team-bulbasaur'
 
       - name: Set up frontend theme
         run: |
-          npm install nodebb-frontend-f24-team-bulbasaur
+          npm install theme/nodebb-frontend-f24-team-bulbasaur
       
       - name: Rebuild NodeBB tpl
         run: |
