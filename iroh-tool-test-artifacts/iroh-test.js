@@ -1,14 +1,17 @@
+'use strict';
+
 const Iroh = require('iroh');
-let code = `
+
+const code = `
 	const groupsPerPage = 10;
 
 `;
 
-let stage = new Iroh.Stage(code);
-let listener = stage.addListener(Iroh.VAR);
+const stage = new Iroh.Stage(code);
+const listener = stage.addListener(Iroh.VAR);
 // logs variable name and value after creation
-listener.on("after", (e) => {
-  console.log(e.name, "=>", e.value); 
+listener.on('after', (e) => {
+	console.log(e.name, '=>', e.value);
 });
 
 eval(stage.script);
