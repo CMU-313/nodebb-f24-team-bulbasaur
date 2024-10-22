@@ -1,0 +1,2 @@
+@qs                                                             # ignore this module regardless of location
+node_modules/connect/node_modules/body-parser/node_modules/qs   # ignore specific path
