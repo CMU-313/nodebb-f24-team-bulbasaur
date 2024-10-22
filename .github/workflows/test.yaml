@@ -76,6 +76,12 @@ jobs:
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
 
+      - name: Install Iroh Tool
+        run: npm install iroh
+
+      - name: Iroh test
+        run: node iroh-tool-test-artifacts/iroh-test.js
+      
       - name: Run ESLint
         run: npm run lint
 
