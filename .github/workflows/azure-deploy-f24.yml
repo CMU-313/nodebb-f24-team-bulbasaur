@@ -52,7 +52,7 @@ jobs:
       
       - name: Set up frontend theme
         run: |
-          npm install ../nodebb-frontend-f24-team-bulbasaur
+          npm install nodebb-frontend-f24-team-bulbasaur
       
       - name: Rebuild NodeBB tpl
         run: |
