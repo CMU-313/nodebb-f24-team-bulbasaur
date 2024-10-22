@@ -28,6 +28,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Current team directory
+        run: |
+          pwd
+
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
@@ -49,6 +53,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'cmu-313/nodebb-frontend-f24-team-bulbasaur'
+        run: |
+          pwd
+
       
       - name: Set up frontend theme
         run: |
