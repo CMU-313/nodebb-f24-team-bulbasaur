@@ -1,0 +1,25 @@
+{
+    "undef": true,
+    "unused": true,
+    "globals": {
+      "MY_GLOBAL": true,
+      "module": false,
+      "require": false,
+      "process": false,
+      "exports": false,
+      "global": false,
+      "console": false,
+      "jQuery": false,
+      "ajaxify": false,
+      "document": false,
+      "socket": false,
+      "config": false,
+      "window": false,
+      "app": false,
+      "__dirname": false
+    },
+    "curly": false,
+    "eqeqeq": true,
+    "nocomma": true,
+    "esversion": 9
+}
