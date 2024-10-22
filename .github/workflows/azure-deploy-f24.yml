@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - f24
+      - frontend-deployment
   workflow_dispatch:
     
 concurrency:
@@ -31,6 +32,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.17.0'
+      
+      - name: Checkout theme repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'cmu-313/nodebb-frontend-f24-team-bulbasaur'
 
       - name: Set up NodeBB
         run: |
@@ -43,6 +49,7 @@ jobs:
             "redis:host": "${{ secrets.REDIS_HOST }}",
             "redis:port": "6379",
             "redis:password": "${{ secrets.REDIS_PASSWORD }}" }'
+          npm install ../nodebb-frontend-f24-team-bulbasaur
           
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
