@@ -50,9 +50,6 @@ jobs:
         with:
           useLockFile: false
       
-      - name: Install JShint
-        run: npm install --save-dev jshint
-
       - name: Setup for Redis
         env:
           SETUP: >-
@@ -78,12 +75,9 @@ jobs:
             }
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
-      
-      - name: Run JSHint
-        run: jshint src public
 
       - name: Run ESLint
-        run: npm run lint
+        run: npm jshint src public
 
       - name: Node tests
         run: npm test
