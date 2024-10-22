@@ -49,7 +49,6 @@ jobs:
             "redis:host": "${{ secrets.REDIS_HOST }}",
             "redis:port": "6379",
             "redis:password": "${{ secrets.REDIS_PASSWORD }}" }'
-          npm install ../nodebb-frontend-f24-team-bulbasaur
           
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
