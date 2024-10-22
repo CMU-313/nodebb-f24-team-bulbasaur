@@ -49,6 +49,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'cmu-313/nodebb-frontend-f24-team-bulbasaur'
+      
+      - name: Set up frontend theme
+        run: |
+          npm install ../nodebb-frontend-f24-team-bulbasaur
+      
+      - name: Rebuild NodeBB tpl
+        run: |
+          ./nodebb build tpl
           
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
