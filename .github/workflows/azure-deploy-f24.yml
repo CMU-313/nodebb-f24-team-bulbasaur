@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - f24
-      - frontend-deployment
   workflow_dispatch:
     
 concurrency:
@@ -46,12 +45,10 @@ jobs:
             "redis:password": "${{ secrets.REDIS_PASSWORD }}" }'
 
       - name: Set up frontend theme
-        run: |
-          npm install https://github.com/CMU-313/nodebb-frontend-f24-team-bulbasaur.git
+        run: npm install https://github.com/CMU-313/nodebb-frontend-f24-team-bulbasaur.git
       
       - name: Rebuild NodeBB tpl
-        run: |
-          ./nodebb build tpl
+        run: ./nodebb build tpl
           
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
