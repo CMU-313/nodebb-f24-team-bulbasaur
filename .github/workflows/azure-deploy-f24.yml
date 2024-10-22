@@ -49,10 +49,27 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'cmu-313/nodebb-frontend-f24-team-bulbasaur'
+      
+
+      - name: Cd 1
+        run: |
+          cd ..
+      
+      - name: Ls 1
+        run: |
+          ls
+      
+      - name: Cd 2
+        run: |
+          cd ..
+      
+      - name: Ls 2
+        run: |
+          ls
 
       - name: Set up frontend theme
         run: |
-          npm install cmu-313/nodebb-frontend-f24-team-bulbasaur
+          npm install ./cmu-313/nodebb-frontend-f24-team-bulbasaur
       
       - name: Rebuild NodeBB tpl
         run: |
