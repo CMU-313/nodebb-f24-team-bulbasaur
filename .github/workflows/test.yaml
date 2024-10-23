@@ -49,7 +49,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
-
+      
       - name: Setup for Redis
         env:
           SETUP: >-
@@ -75,6 +75,12 @@ jobs:
             }
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
+
+      - name: Install jshint
+        run: npm install -g jshint
+
+      - name: Run jshint
+        run: jshint * --exclude node_modules
 
       - name: Run ESLint
         run: npm run lint

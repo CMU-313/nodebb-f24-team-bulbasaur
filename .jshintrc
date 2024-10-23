@@ -1,0 +1,29 @@
+{
+    "undef": true,
+    "unused": true,
+    "node": true,
+    "jquery": true,
+    "sub": true,
+    "globals": {
+      "MY_GLOBAL": true,
+      "window": false,
+      "document": false,
+      "fetch": false,
+      "config": false,
+      "scale": false,
+      "socket": false,
+      "app": false,
+      "define": false,
+      "utils": false,
+      "it": false,
+      "describe": false,
+      "after": false,
+      "before": false,
+      "localStorage": false,
+      "beforeEach": false,
+      "afterEach": false,
+      "FileReader": false,
+      "ajaxify": false
+    },
+    "esversion": 11
+}
