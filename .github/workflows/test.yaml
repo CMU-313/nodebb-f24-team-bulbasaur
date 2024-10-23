@@ -76,6 +76,15 @@ jobs:
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
 
+      - name: Install Jalangi
+        run: |
+          cd jalangi2
+          npm install
+          cd ..
+      
+      - name: Run Jalangi Analysis
+        run: node jalangi2/src/js/commands/direct.js --analysis jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis jalangi2/src/js/sample_analyses/dlint/Utils.js --analysis jalangi2/src/js/sample_analyses/dlint/CheckNaN.js --analysis jalangi2/src/js/sample_analyses/dlint/FunCalledWithMoreArguments.js --analysis jalangi2/src/js/sample_analyses/dlint/CompareFunctionWithPrimitives.js --analysis jalangi2/src/js/sample_analyses/dlint/ShadowProtoProperty.js --analysis jalangi2/src/js/sample_analyses/dlint/ConcatUndefinedToString.js --analysis jalangi2/src/js/sample_analyses/dlint/UndefinedOffset.js require-main_jalangi_.js
+
       - name: Run ESLint
         run: npm run lint
 

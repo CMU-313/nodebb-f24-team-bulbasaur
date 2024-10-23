@@ -19,3 +19,5 @@ logs/
 test/files
 *.min.js
 install/docker/
+jalangi2
+require-main_jalangi_.js
