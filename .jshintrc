@@ -4,6 +4,7 @@
     "node": true,
     "jquery": true,
     "quotmark": true,
+    "sub": true,
     "globals": {
       "MY_GLOBAL": true,
       "window": false,
