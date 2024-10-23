@@ -76,6 +76,9 @@ jobs:
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
 
+      - name: Install K6
+        run: brew install k6
+      
       - name: Run K6 Test
         run: k6 run k6-test.js
       
