@@ -75,11 +75,12 @@ jobs:
             }
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
+
       - name: Install jshint
         run: npm install -g jshint
 
       - name: Run jshint
-        run: jshint src public
+        run: jshint *
 
       - name: Run ESLint
         run: npm jshint src public
