@@ -10,7 +10,7 @@ put:
         type: string
       required: true
       description: A valid topic ID
-      example: '2'
+      example: "2"
   requestBody:
     required: true
     content:
@@ -23,7 +23,7 @@ put:
               description: Whether the topic is solved (true) or unsolved (false)
               example: true
   responses:
-    '200':
+    "200":
       description: Topic successfully marked as solved or unsolved
       content:
         application/json:
@@ -35,7 +35,7 @@ put:
               response:
                 type: object
                 properties: {}
-    '404':
+    "404":
       description: Topic not found
       content:
         application/json:
