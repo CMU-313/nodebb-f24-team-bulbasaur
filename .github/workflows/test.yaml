@@ -75,7 +75,12 @@ jobs:
             }
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
-
+      
+      - name: Run K6 Test
+        uses: k6io/action@v0.1
+        with:
+         filename: k6-test.js 
+      
       - name: Run ESLint
         run: npm run lint
 
