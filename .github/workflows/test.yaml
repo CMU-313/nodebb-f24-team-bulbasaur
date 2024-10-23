@@ -79,6 +79,9 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Run prettier to clean up codebase
+        run: npx prettier . --write
+
       - name: Node tests
         run: npm test
 
