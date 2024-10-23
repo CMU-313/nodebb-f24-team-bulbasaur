@@ -78,6 +78,7 @@ jobs:
 
       - name: Install Jalangi
         run: |
+          git clone https://github.com/Samsung/jalangi2.git
           cd jalangi2
           npm install
           cd ..
