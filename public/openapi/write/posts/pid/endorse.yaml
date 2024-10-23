@@ -1,4 +1,4 @@
-put:  
+put:
   tags:
     - posts
   summary: Endorse or unendorse a post
@@ -10,7 +10,7 @@ put:
         type: string
       required: true
       description: A valid post ID
-      example: '2'
+      example: "2"
   requestBody:
     required: true
     content:
@@ -23,7 +23,7 @@ put:
               description: Whether the post is endorsed (true) or unendorsed (false)
               example: true
   responses:
-    '200':
+    "200":
       description: Post successfully endorsed or unendorsed
       content:
         application/json:
@@ -35,7 +35,7 @@ put:
               response:
                 type: object
                 properties: {}
-    '404':
+    "404":
       description: Post not found
       content:
         application/json:
