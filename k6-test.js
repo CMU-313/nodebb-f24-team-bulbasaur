@@ -1,7 +1,5 @@
 import http from 'k6/http';
-import exec from 'k6/execution';
-import { check, sleep, fail } from 'k6';
-import { browser } from 'k6/browser';
+import { check, sleep } from 'k6';
 
 export const options = {
   thresholds: {
