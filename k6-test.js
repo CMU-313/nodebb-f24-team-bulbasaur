@@ -55,6 +55,10 @@ export const options = {
     { duration: '30s', target: 100 }, 
     { duration: '5s', target: 0 } 
   ],
+  threshold: {
+    http_req_failed: ['rate<0.00'],   // http errors should be less than 2%
+    http_req_duration: ['p(95)<10'], // 95% of requests should be below 2s
+  }
 };
 
 // The function that defines VU logic.
