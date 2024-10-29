@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - f24
+  pull-request:
+    branches:
+      - f24
   workflow_dispatch:
     
 concurrency:
@@ -58,3 +61,11 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DD104B6B0E3A46A5BE6C5F708D090CF7 }}
           package: .
+
+      - name: Setup K6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run local k6 test
+        uses: grafana/run-k6-action@v1
+        with:
+          path: k6-test.js     

@@ -28,7 +28,6 @@ export const options = {
     performance: {
       executor: 'ramping-vus',
       stages : [
-        // { duration: '1s', target: 1 }, 
         { duration: '10s', target: 10 }, 
         { duration: '30s', target: 20 }, 
         { duration: '30s', target: 40 }, 
@@ -54,7 +53,6 @@ export const options = {
 // about authoring k6 scripts.
 //
 export default function() {
-  // const res = http.get('https://nodebb-team-bulbasaur1.azurewebsites.net');
   const res = http.get('https://nodebb-team-bulbasaur1.azurewebsites.net/');
   check(res, {
     'is status 200': (r) => r.status === 200,
