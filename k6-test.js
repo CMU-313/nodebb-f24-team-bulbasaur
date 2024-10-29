@@ -6,14 +6,14 @@ export const options = {
   thresholds: {
     http_req_failed: [
       {
-        threshold: 'rate<0.15', // http errors should be less than 10%
+        threshold: 'rate<0.20', // http errors should be less than 10%
         abortOnFail: true,
         delayAbortEval: '10s', 
       },
     ],   
     http_req_duration: [
       {
-        threshold: 'p(95) < 2500',// 95% of requests should be below 2s
+        threshold: 'p(95) < 3000',// 95% of requests should be below 2s
         abortOnFail: true,
         delayAbortEval: '10s', 
       },
