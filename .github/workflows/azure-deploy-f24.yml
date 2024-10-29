@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - f24
-  pull-request:
+  pull_request:
     branches:
       - f24
   workflow_dispatch:

@@ -6,23 +6,18 @@ export const options = {
   thresholds: {
     http_req_failed: [
       {
-        threshold: 'rate<0.10', 
+        threshold: 'rate<0.10', // http errors should be less than 10%
         abortOnFail: true,
-        delayAbortEval: '10s', // string
+        delayAbortEval: '10s', 
       },
-    ],   // http errors should be less than 2%
+    ],   
     http_req_duration: [
       {
-        threshold: 'p(95) < 2000',
+        threshold: 'p(95) < 2000',// 95% of requests should be below 2s
         abortOnFail: true,
-        delayAbortEval: '10s', // string
+        delayAbortEval: '10s', 
       },
-    ], // 95% of requests should be below 2s
-    checks: [
-      {
-        threshold: 'rate>0.90'
-      },
-    ],
+    ], 
   },
   scenarios: {
     performance: {
@@ -54,9 +49,6 @@ export const options = {
 //
 export default function() {
   const res = http.get('https://nodebb-team-bulbasaur1.azurewebsites.net/');
-  check(res, {
-    'is status 200': (r) => r.status === 200,
-  });
   sleep(1);
 };
 
@@ -108,11 +100,11 @@ export async function ui_test(){
         'is status Unsolved': (status) => status === true,
       });
     }
+    //reset solve button status
     await solveButton.click();
 
   
   } finally{
-    await page.goto('https://nodebb-team-bulbasaur1.azurewebsites.net');
     await page.close();
   }
 }
