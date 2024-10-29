@@ -29,12 +29,11 @@ export const options = {
       executor: 'ramping-vus',
       stages : [
         // { duration: '1s', target: 1 }, 
-        { duration: '30s', target: 10 }, 
+        { duration: '10s', target: 10 }, 
         { duration: '30s', target: 20 }, 
         { duration: '30s', target: 40 }, 
         { duration: '30s', target: 80 }, 
         { duration: '30s', target: 160 }, 
-        { duration: '30s', target: 0 }, 
       ]
     }, 
     ui: {
@@ -66,35 +65,56 @@ export default function() {
 export async function ui_test(){
   const page = await browser.newPage();
   try {
-    // await page.screenshot({ path: 'screenshots/homepage.png' });
+
     //login as admin
     await page.goto('https://nodebb-team-bulbasaur1.azurewebsites.net/login');
-    // await page.screenshot({ path: 'screenshots/login-page.png' });
     await page.locator('input[name="username"]').fill('admin');
     await page.locator('input[name="password"]').fill('bulbasaur');
-    // await page.screenshot({ path: 'screenshots/after-login-in.png' });
     const submitButton = page.locator('button[type="submit"]');
-    await Promise.all([page.waitForNavigation(), submitButton.click()]);
-    // await page.screenshot({ path: 'screenshots/after-login-in.png' });
-    
-    // await page.goto("https://nodebb-team-bulbasaur1.azurewebsites.net/");
-    
-    // await page.goto("https://nodebb-team-bulbasaur1.azurewebsites.net/category/1/announcements");
-    // await page.screenshot({ path: 'screenshots/category.png' });
-    // const title = page.locator('a[component="topic/header"]');
-    // console.log(title.title);
-    // check(title, {
-    //   'has right title': (r) => r.title === 'DO NOT POST HERE',
-    // })
-    // await Promise.all([page.waitForNavigation(), title.click()]);
-    await page.goto("https://nodebb-team-bulbasaur1.azurewebsites.net/topic/5/do-not-post-here")
-    await page.screenshot({ path: 'screenshots/topic.png' });
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 }),
+      submitButton.click()
+    ]);
 
-    const solveButton = page.locator('div[component="post/solve"]');
+    // go to testing topic
+    await page.goto("https://nodebb-team-bulbasaur1.azurewebsites.net/topic/5/do-not-post-here", { waitUntil: 'networkidle' });
+
+    // test for solve/unsolve in topic
+    await page.waitForSelector('div[component="topic/solve"]');
+    const solveButton = page.locator('div[component="topic/solve"]');
+    const solveButtonStatus = await solveButton.textContent();
+    console.log('solveButtonStatus:', solveButtonStatus);
+    const newSolveButton = page.locator('div[component="topic/solve"]');
+    if (solveButtonStatus && solveButtonStatus.includes('Unsolved')) {
+      console.log('Clicking the solve button because status is Unsolved...');
+      await solveButton.click();
+      await page.waitForTimeout(2000); // Wait for the button state to change after clicking
+
+      // Verify the button has changed to 'Solved'
+      const newSolveButtonText = await solveButton.textContent();
+      const solvedStatusCheck = newSolveButtonText.includes('Solved');
+      console.log(`New solve button status: ${newSolveButtonText}`);
+      check(solvedStatusCheck, {
+        'is status Solved': (status) => status === true,
+      });
+    } else {
+      console.log('Clicking the solve button because status is Unsolved...');
+      await solveButton.click();
+      await page.waitForTimeout(2000); // Wait for the button state to change after clicking
+
+      // Verify the button has changed to 'Unsolved'
+      const newSolveButtonText = await solveButton.textContent();
+      const solvedStatusCheck = newSolveButtonText.includes('Unsolved');
+      console.log(`New solve button status: ${newSolveButtonText}`);
+      check(solvedStatusCheck, {
+        'is status Unsolved': (status) => status === true,
+      });
+    }
     await solveButton.click();
-    await page.screenshot({ path: 'screenshots/topic.png' });
+
   
   } finally{
+    await page.goto('https://nodebb-team-bulbasaur1.azurewebsites.net');
     await page.close();
   }
 }
