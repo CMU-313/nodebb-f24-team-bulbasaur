@@ -34,7 +34,8 @@ jobs:
           - 6379:6379
 
     steps:
-      - uses: actions/checkout@v4
+
+
 
       - name: Install sendmail
         run: sudo apt-get install -y sendmail
