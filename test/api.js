@@ -663,7 +663,7 @@ describe('API', async () => {
 			if (additionalProperties) { // All bets are off
 				return;
 			}
-			if (prop === "isEnglish" || prop === "translatedContent") {
+			if (prop === 'isEnglish' || prop === 'translatedContent') {
 				return; // Skip the check for these properties
 			}
 
