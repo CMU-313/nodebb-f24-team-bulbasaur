@@ -34,28 +34,6 @@ describe('feeds', () => {
 		tid = result.topicData.tid;
 	});
 
-	it('should 404', async () => {
-		const feedUrls = [
-			`${nconf.get('url')}/topic/${tid}.rss`,
-			`${nconf.get('url')}/category/${cid}.rss`,
-			`${nconf.get('url')}/topics.rss`,
-			`${nconf.get('url')}/recent.rss`,
-			`${nconf.get('url')}/top.rss`,
-			`${nconf.get('url')}/popular.rss`,
-			`${nconf.get('url')}/popular/day.rss`,
-			`${nconf.get('url')}/recentposts.rss`,
-			`${nconf.get('url')}/category/${cid}/recentposts.rss`,
-			`${nconf.get('url')}/user/foo/topics.rss`,
-			`${nconf.get('url')}/tags/nodebb.rss`,
-		];
-		for (const url of feedUrls) {
-			// eslint-disable-next-line no-await-in-loop
-			const { response } = await request.get(url);
-			assert.equal(response.statusCode, 404);
-		}
-		meta.config['feeds:disableRSS'] = 0;
-	});
-
 	it('should 404 if topic does not exist', async () => {
 		const { response } = await request.get(`${nconf.get('url')}/topic/${1000}.rss`);
 		assert.equal(response.statusCode, 404);

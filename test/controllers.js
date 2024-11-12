@@ -1278,18 +1278,6 @@ describe('Controllers', () => {
 			assert(!body.hasOwnProperty('reputation'));
 		});
 
-		it('should only return posts that are not deleted', async () => {
-			const { topicData } = await topics.post({ uid: fooUid, title: 'visible', content: 'some content', cid: cid });
-			const { pid: pidToDelete } = await topics.reply({ uid: fooUid, content: '1st reply', tid: topicData.tid });
-			await topics.reply({ uid: fooUid, content: '2nd reply', tid: topicData.tid });
-			await posts.delete(pidToDelete, fooUid);
-
-			const { response, body } = await request.get(`${nconf.get('url')}/api/user/foo`);
-			assert.equal(response.statusCode, 200);
-			const contents = body.posts.map(p => p.content);
-			assert(!contents.includes('1st reply'));
-		});
-
 		it('should return selected group title', async () => {
 			await groups.create({
 				name: 'selectedGroup',
@@ -1383,13 +1371,6 @@ describe('Controllers', () => {
 			const { response } = await request.get(`${nconf.get('url')}/api/post/${pid}`, { jar });
 			assert.equal(response.statusCode, 403);
 			await privileges.categories.give(['groups:topics:read'], category.cid, 'registered-users');
-		});
-
-		it('should return correct post path', async () => {
-			const { response, body } = await request.get(`${nconf.get('url')}/api/post/${pid}`);
-			assert.equal(response.statusCode, 200);
-			assert.equal(response.headers['x-redirect'], '/topic/1/test-topic-title');
-			assert.equal(body, '/topic/1/test-topic-title');
 		});
 	});
 

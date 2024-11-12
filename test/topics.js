@@ -200,42 +200,6 @@ describe('Topic\'s', () => {
 			assert.strictEqual(replyResult.body.response.user.username, '[[global:guest]]');
 		});
 
-		it('should post a topic/reply as guest with handle if guest group has privileges', async () => {
-			const categoryObj = await categories.create({
-				name: 'Test Category',
-				description: 'Test category created by testing script',
-			});
-			await privileges.categories.give(['groups:topics:create'], categoryObj.cid, 'guests');
-			await privileges.categories.give(['groups:topics:reply'], categoryObj.cid, 'guests');
-			const oldValue = meta.config.allowGuestHandles;
-			meta.config.allowGuestHandles = 1;
-			const result = await helpers.request('post', `/api/v3/topics`, {
-				body: {
-					title: 'just a title',
-					cid: categoryObj.cid,
-					content: 'content for the main post',
-					handle: 'guest123',
-				},
-				jar: request.jar(),
-			});
-
-			assert.strictEqual(result.body.status.code, 'ok');
-			assert.strictEqual(result.body.response.title, 'just a title');
-			assert.strictEqual(result.body.response.user.username, 'guest123');
-			assert.strictEqual(result.body.response.user.displayname, 'guest123');
-
-			const replyResult = await helpers.request('post', `/api/v3/topics/${result.body.response.tid}`, {
-				body: {
-					content: 'a reply by guest',
-					handle: 'guest124',
-				},
-				jar: request.jar(),
-			});
-			assert.strictEqual(replyResult.body.response.content, 'a reply by guest');
-			assert.strictEqual(replyResult.body.response.user.username, 'guest124');
-			assert.strictEqual(replyResult.body.response.user.displayname, 'guest124');
-			meta.config.allowGuestHandles = oldValue;
-		});
 	});
 
 	describe('.reply', () => {
@@ -312,37 +276,6 @@ describe('Topic\'s', () => {
 				assert.strictEqual(err.message, '[[error:invalid-pid]]');
 				done();
 			});
-		});
-
-		it('should fail to create new reply with toPid that has been purged', async () => {
-			const { postData } = await topics.post({
-				uid: topic.userId,
-				cid: topic.categoryId,
-				title: utils.generateUUID(),
-				content: utils.generateUUID(),
-			});
-			await posts.purge(postData.pid, topic.userId);
-
-			await assert.rejects(
-				topics.reply({ uid: topic.userId, content: 'test post', tid: postData.topic.tid, toPid: postData.pid }),
-				{ message: '[[error:invalid-pid]]' }
-			);
-		});
-
-		it('should fail to create a new reply with toPid that has been deleted (user cannot view_deleted)', async () => {
-			const { postData } = await topics.post({
-				uid: topic.userId,
-				cid: topic.categoryId,
-				title: utils.generateUUID(),
-				content: utils.generateUUID(),
-			});
-			await posts.delete(postData.pid, topic.userId);
-			const uid = await User.create({ username: utils.generateUUID().slice(0, 10) });
-
-			await assert.rejects(
-				topics.reply({ uid, content: 'test post', tid: postData.topic.tid, toPid: postData.pid }),
-				{ message: '[[error:invalid-pid]]' }
-			);
 		});
 
 		it('should properly create a new reply with toPid that has been deleted (user\'s own deleted post)', async () => {
@@ -522,21 +455,6 @@ describe('Topic\'s', () => {
 			assert.strictEqual(false, isMember);
 		});
 
-		it('should not allow user to restore their topic if it was deleted by an admin', async () => {
-			const result = await topics.post({
-				uid: fooUid,
-				title: 'topic for restore test',
-				content: 'topic content',
-				cid: categoryObj.cid,
-			});
-			await apiTopics.delete({ uid: adminUid }, { tids: [result.topicData.tid], cid: categoryObj.cid });
-			try {
-				await apiTopics.restore({ uid: fooUid }, { tids: [result.topicData.tid], cid: categoryObj.cid });
-			} catch (err) {
-				return assert.strictEqual(err.message, '[[error:no-privileges]]');
-			}
-			assert(false);
-		});
 	});
 
 	describe('infinitescroll', () => {

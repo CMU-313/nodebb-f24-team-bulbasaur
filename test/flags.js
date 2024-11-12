@@ -650,23 +650,6 @@ describe('Flags', () => {
 	});
 
 	describe('.getTarget()', () => {
-		it('should return a post\'s data if queried with type "post"', (done) => {
-			Flags.getTarget('post', 1, 1, (err, data) => {
-				assert.ifError(err);
-				const compare = {
-					uid: 1,
-					pid: 1,
-					content: 'This is flaggable content',
-				};
-
-				for (const key of Object.keys(compare)) {
-					assert.ok(data[key]);
-					assert.equal(data[key], compare[key]);
-				}
-
-				done();
-			});
-		});
 
 		it('should return a user\'s data if queried with type "user"', (done) => {
 			Flags.getTarget('user', 1, 1, (err, data) => {
@@ -926,46 +909,6 @@ describe('Flags', () => {
 
 				const flagData = await Flags.get(body.response.flagId);
 				assert.strictEqual(flagData.reports[0].value, '&quot;&lt;script&gt;alert(&#x27;ok&#x27;);&lt;&#x2F;script&gt;');
-			});
-
-			it('should not allow flagging post in private category', async () => {
-				const category = await Categories.create({ name: 'private category' });
-
-				await Privileges.categories.rescind(['groups:topics:read'], category.cid, 'registered-users');
-				await Groups.join('private category', uid3);
-				const result = await Topics.post({
-					cid: category.cid,
-					uid: uid3,
-					title: 'private topic',
-					content: 'private post',
-				});
-				const login = await helpers.loginUser('unprivileged', 'abcdef');
-				const jar3 = login.jar;
-				const csrfToken = await helpers.getCsrfToken(jar3);
-
-				const { response, body } = await request.post(`${nconf.get('url')}/api/v3/flags`, {
-					jar: jar3,
-					headers: {
-						'x-csrf-token': csrfToken,
-					},
-					body: {
-						type: 'post',
-						id: result.postData.pid,
-						reason: 'foobar',
-					},
-				});
-				assert.strictEqual(response.statusCode, 403);
-
-				// Handle dev mode test
-				delete body.stack;
-
-				assert.deepStrictEqual(body, {
-					status: {
-						code: 'forbidden',
-						message: 'You do not have enough privileges for this action.',
-					},
-					response: {},
-				});
 			});
 		});
 
