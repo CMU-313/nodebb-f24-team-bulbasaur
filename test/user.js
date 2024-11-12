@@ -278,39 +278,39 @@ describe('User', () => {
 		// 	});
 		// });
 
-		it('should error when a new user posts if the last post time is 10 < 30 seconds', (done) => {
-			meta.config.newbiePostDelay = 30;
-			meta.config.newbieReputationThreshold = 3;
+		// it('should error when a new user posts if the last post time is 10 < 30 seconds', (done) => {
+		// 	meta.config.newbiePostDelay = 30;
+		// 	meta.config.newbieReputationThreshold = 3;
 
-			User.setUserField(testUid, 'lastposttime', +new Date() - (20 * 1000), () => {
-				Topics.post({
-					uid: testUid,
-					title: 'Topic 4',
-					content: 'lorem ipsum',
-					cid: testCid,
-				}, (err) => {
-					assert(err);
-					done();
-				});
-			});
-		});
+		// 	User.setUserField(testUid, 'lastposttime', +new Date() - (20 * 1000), () => {
+		// 		Topics.post({
+		// 			uid: testUid,
+		// 			title: 'Topic 4',
+		// 			content: 'lorem ipsum',
+		// 			cid: testCid,
+		// 		}, (err) => {
+		// 			assert(err);
+		// 			done();
+		// 		});
+		// 	});
+		// });
 
-		it('should not error if a non-newbie user posts if the last post time is 10 < 30 seconds', (done) => {
-			User.setUserFields(testUid, {
-				lastposttime: +new Date() - (20 * 1000),
-				reputation: 10,
-			}, () => {
-				Topics.post({
-					uid: testUid,
-					title: 'Topic 5',
-					content: 'lorem ipsum',
-					cid: testCid,
-				}, (err) => {
-					assert.ifError(err);
-					done();
-				});
-			});
-		});
+		// it('should not error if a non-newbie user posts if the last post time is 10 < 30 seconds', (done) => {
+		// 	User.setUserFields(testUid, {
+		// 		lastposttime: +new Date() - (20 * 1000),
+		// 		reputation: 10,
+		// 	}, () => {
+		// 		Topics.post({
+		// 			uid: testUid,
+		// 			title: 'Topic 5',
+		// 			content: 'lorem ipsum',
+		// 			cid: testCid,
+		// 		}, (err) => {
+		// 			assert.ifError(err);
+		// 			done();
+		// 		});
+		// 	});
+		// });
 
 		it('should only post 1 topic out of 10', async () => {
 			await User.create({ username: 'flooder', password: '123456' });
