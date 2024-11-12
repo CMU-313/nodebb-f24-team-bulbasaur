@@ -650,7 +650,6 @@ describe('Flags', () => {
 	});
 
 	describe('.getTarget()', () => {
-
 		it('should return a user\'s data if queried with type "user"', (done) => {
 			Flags.getTarget('user', 1, 1, (err, data) => {
 				assert.ifError(err);

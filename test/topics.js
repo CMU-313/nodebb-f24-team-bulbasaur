@@ -199,7 +199,6 @@ describe('Topic\'s', () => {
 			assert.strictEqual(replyResult.body.response.content, 'a reply by guest');
 			assert.strictEqual(replyResult.body.response.user.username, '[[global:guest]]');
 		});
-
 	});
 
 	describe('.reply', () => {
@@ -454,7 +453,6 @@ describe('Topic\'s', () => {
 			const isMember = await db.isSortedSetMember(`uid:${followerUid}:followed_tids`, newTopic.tid);
 			assert.strictEqual(false, isMember);
 		});
-
 	});
 
 	describe('infinitescroll', () => {
