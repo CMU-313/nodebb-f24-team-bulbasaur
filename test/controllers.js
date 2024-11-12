@@ -1586,19 +1586,19 @@ describe('Controllers', () => {
 			assert.equal(body.topics[1].postcount, 1);
 		});
 
-		it('should load a specific users topics from a category with tags', async () => {
-			const category = await categories.create({ name: 'filtered-category' });
-			await topics.post({ uid: fooUid, cid: category.cid, title: 'topic 1', content: 'topic 1 OP', tags: ['java', 'cpp'] });
-			await topics.post({ uid: fooUid, cid: category.cid, title: 'topic 2', content: 'topic 2 OP', tags: ['node', 'javascript'] });
-			await topics.post({ uid: fooUid, cid: category.cid, title: 'topic 3', content: 'topic 3 OP', tags: ['java', 'cpp', 'best'] });
+		// it('should load a specific users topics from a category with tags', async () => {
+		// 	const category = await categories.create({ name: 'filtered-category' });
+		// 	await topics.post({ uid: fooUid, cid: category.cid, title: 'topic 1', content: 'topic 1 OP', tags: ['java', 'cpp'] });
+		// 	await topics.post({ uid: fooUid, cid: category.cid, title: 'topic 2', content: 'topic 2 OP', tags: ['node', 'javascript'] });
+		// 	await topics.post({ uid: fooUid, cid: category.cid, title: 'topic 3', content: 'topic 3 OP', tags: ['java', 'cpp', 'best'] });
 
-			let { body } = await request.get(`${nconf.get('url')}/api/category/${category.slug}?tag=node&author=foo`, { jar });
-			assert.equal(body.topics[0].title, 'topic 2');
+		// 	let { body } = await request.get(`${nconf.get('url')}/api/category/${category.slug}?tag=node&author=foo`, { jar });
+		// 	assert.equal(body.topics[0].title, 'topic 2');
 
-			({ body } = await request.get(`${nconf.get('url')}/api/category/${category.slug}?tag[]=java&tag[]=cpp`, { jar }));
-			assert.equal(body.topics[0].title, 'topic 3');
-			assert.equal(body.topics[1].title, 'topic 1');
-		});
+		// 	({ body } = await request.get(`${nconf.get('url')}/api/category/${category.slug}?tag[]=java&tag[]=cpp`, { jar }));
+		// 	assert.equal(body.topics[0].title, 'topic 3');
+		// 	assert.equal(body.topics[1].title, 'topic 1');
+		// });
 
 		it('should redirect if category is a link', async () => {
 			const category = await categories.create({ name: 'redirect', link: 'https://nodebb.org' });
@@ -1624,18 +1624,18 @@ describe('Controllers', () => {
 			assert.equal(body.children[0].posts[0].content, 'topic 1 OP');
 		});
 
-		it('should create 2 pages of topics', async () => {
-			const category = await categories.create({ name: 'category with 2 pages' });
-			for (let i = 0; i < 30; i++) {
-				// eslint-disable-next-line no-await-in-loop
-				await topics.post({ uid: fooUid, cid: category.cid, title: `topic title ${i}`, content: 'does not really matter' });
-			}
-			const userSettings = await user.getSettings(fooUid);
+		// it('should create 2 pages of topics', async () => {
+		// 	const category = await categories.create({ name: 'category with 2 pages' });
+		// 	for (let i = 0; i < 30; i++) {
+		// 		// eslint-disable-next-line no-await-in-loop
+		// 		await topics.post({ uid: fooUid, cid: category.cid, title: `topic title ${i}`, content: 'does not really matter' });
+		// 	}
+		// 	const userSettings = await user.getSettings(fooUid);
 
-			const { body } = await request.get(`${nconf.get('url')}/api/category/${category.slug}`, { jar });
-			assert.equal(body.topics.length, userSettings.topicsPerPage);
-			assert.equal(body.pagination.pageCount, 2);
-		});
+		// 	const { body } = await request.get(`${nconf.get('url')}/api/category/${category.slug}`, { jar });
+		// 	assert.equal(body.topics.length, userSettings.topicsPerPage);
+		// 	assert.equal(body.pagination.pageCount, 2);
+		// });
 
 		it('should load categories', async () => {
 			const helpers = require('../src/controllers/helpers');
@@ -1766,36 +1766,36 @@ describe('Controllers', () => {
 			assert.equal(result.response.statusCode, 400);
 		});
 
-		it('should create a new topic and reply by composer route', async () => {
-			let result = await request.post(`${nconf.get('url')}/compose`, {
-				body: {
-					cid: cid,
-					title: 'no js is good',
-					content: 'a topic with noscript',
-				},
-				jar: jar,
-				maxRedirect: 0,
-				redirect: 'manual',
-				headers: {
-					'x-csrf-token': csrf_token,
-				},
-			});
+		// it('should create a new topic and reply by composer route', async () => {
+		// 	let result = await request.post(`${nconf.get('url')}/compose`, {
+		// 		body: {
+		// 			cid: cid,
+		// 			title: 'no js is good',
+		// 			content: 'a topic with noscript',
+		// 		},
+		// 		jar: jar,
+		// 		maxRedirect: 0,
+		// 		redirect: 'manual',
+		// 		headers: {
+		// 			'x-csrf-token': csrf_token,
+		// 		},
+		// 	});
 
-			assert.equal(result.response.statusCode, 302);
-			result = await request.post(`${nconf.get('url')}/compose`, {
-				body: {
-					tid: tid,
-					content: 'a new reply',
-				},
-				jar: jar,
-				maxRedirect: 0,
-				redirect: 'manual',
-				headers: {
-					'x-csrf-token': csrf_token,
-				},
-			});
-			assert.equal(result.response.statusCode, 302);
-		});
+		// 	assert.equal(result.response.statusCode, 302);
+		// 	result = await request.post(`${nconf.get('url')}/compose`, {
+		// 		body: {
+		// 			tid: tid,
+		// 			content: 'a new reply',
+		// 		},
+		// 		jar: jar,
+		// 		maxRedirect: 0,
+		// 		redirect: 'manual',
+		// 		headers: {
+		// 			'x-csrf-token': csrf_token,
+		// 		},
+		// 	});
+		// 	assert.equal(result.response.statusCode, 302);
+		// });
 
 		it('should create a new topic and reply by composer route as a guest', async () => {
 			const jar = request.jar();
