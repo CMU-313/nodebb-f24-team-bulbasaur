@@ -26,7 +26,7 @@ const emptyUploadsFolder = async () => {
 		await file.delete(`${nconf.get('upload_path')}/files/${filename}`);
 	}));
 };
-
+ 
 // describe('Upload Controllers', () => {
 // 	let tid;
 // 	let cid;
