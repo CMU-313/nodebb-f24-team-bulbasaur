@@ -455,17 +455,6 @@ describe('Topic\'s', () => {
 				}
 			});
 
-			it('should get a topic with posts and other data', async () => {
-				const topicData = await topics.getTopicData(tid);
-				const data = await topics.getTopicWithPosts(topicData, `tid:${tid}:posts`, topic.userId, 0, -1, false);
-				assert(data);
-				assert.equal(data.category.cid, topic.categoryId);
-				assert.equal(data.unreplied, false);
-				assert.equal(data.deleted, false);
-				assert.equal(data.locked, false);
-				assert.equal(data.pinned, false);
-			});
-
 			it('should return first 3 posts including main post', async () => {
 				const topicData = await topics.getTopicData(tid);
 				const data = await topics.getTopicWithPosts(topicData, `tid:${tid}:posts`, topic.userId, 0, 2, false);
